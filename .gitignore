@@ -1,0 +1,27 @@
+# Bundler
+Gemfile.lock
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Ruby
+.ruby-version
+.ruby-gemset
+tmp/
+log/
+
+# Database
+*.db
+*.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
