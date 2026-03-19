@@ -7,27 +7,64 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <nav>
-    <div class="nav-container">
-      <h1><a href="/">DonationPlatform</a></h1>
-      <ul>
+  <header class="site-header">
+    <nav class="nav-container" aria-label="Hovedmenu">
+      <a class="brand" href="/">Danmarks Donation</a>
+      <ul class="nav-links">
         <li><a href="/campaigns">Kampagner</a></li>
+        <li><a href="#">Opret kampagne</a></li>
         <li><a href="/login">Log ind</a></li>
-        <li><a href="/signup">Opret konto</a></li>
       </ul>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
-  <main>
-    <section class="hero">
-      <h1>Samlet ind til formål der betyder noget</h1>
-      <p>En transparent og sikker donationsplatform for alle velgørende organisationer</p>
-      <a href="/campaigns" class="btn btn-primary">Se kampagner</a>
+  <main class="page-content">
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="hero-kicker">Tryg og gennemsigtig indsamling</p>
+      <h1 id="hero-title">Støt de sager, der betyder noget</h1>
+      <p class="hero-description">Find verificerede kampagner, følg fremgangen, og donér på under et minut.</p>
+      <a href="/campaigns" class="btn-primary">Se kampagner</a>
+    </section>
+
+    <section class="categories" aria-label="Kategorier">
+      <% categories = @categories || ['Alle', 'Klima', 'Dyr', 'Sundhed', 'Lokalt'] %>
+      <% selected_category = @selected_category || 'Alle' %>
+      <% categories.each do |category| %>
+        <% active = (selected_category == category) %>
+        <a
+          href="/?category=<%= category %>"
+          class="chip<%= active ? ' chip-active' : '' %>"
+        ><%= category %></a>
+      <% end %>
+    </section>
+
+    <section class="campaign-grid" aria-label="Fremhaevede kampagner">
+      <% campaigns = @featured_campaigns || [] %>
+      <% if campaigns.empty? %>
+        <p class="empty-state">Ingen kampagner i denne kategori endnu.</p>
+      <% else %>
+        <% campaigns.each_with_index do |campaign, index| %>
+          <% collected = example_collected_amount(campaign.goal) %>
+          <% progress = progress_percentage(collected, campaign.goal) %>
+          <% campaign_id = campaign.id || (index + 1) %>
+          <article class="campaign-card">
+            <div class="campaign-image"></div>
+            <div class="campaign-content">
+              <p class="campaign-category"><%= campaign.category %></p>
+              <h2><a href="/campaigns/<%= campaign_id %>" class="campaign-title-link"><%= campaign.title %></a></h2>
+              <p><%= campaign.description %></p>
+              <div class="campaign-progress" aria-label="Fremgang <%= progress %> procent">
+                <div class="campaign-progress-fill" style="width: <%= progress %>%;"></div>
+              </div>
+              <div class="campaign-meta">
+                <span><%= collected %> kr af <%= campaign.goal %> kr</span>
+                <a href="/campaigns/<%= campaign_id %>" class="card-link">Donér</a>
+              </div>
+            </div>
+          </article>
+        <% end %>
+      <% end %>
     </section>
   </main>
-
-  <footer>
-    <p>&copy; 2026 DonationPlatform. Alle rettigheder forbeholdt.</p>
-  </footer>
 </body>
 </html>

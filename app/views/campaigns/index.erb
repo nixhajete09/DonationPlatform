@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kampagner - DonationPlatform</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container" aria-label="Hovedmenu">
+      <a class="brand" href="/">Danmarks Donation</a>
+      <ul class="nav-links">
+        <li><a href="/campaigns">Kampagner</a></li>
+        <li><a href="#">Opret kampagne</a></li>
+        <li><a href="/login">Log ind</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <section class="detail-card">
+      <h1>Kampagner</h1>
+      <p class="detail-description">Vælg en kampagne for at se flere detaljer.</p>
+    </section>
+
+    <section class="campaign-grid" aria-label="Kampagneliste">
+      <% @campaigns.each_with_index do |campaign, index| %>
+        <% campaign_id = campaign.id || (index + 1) %>
+        <% collected = example_collected_amount(campaign.goal) %>
+        <% progress = progress_percentage(collected, campaign.goal) %>
+        <article class="campaign-card">
+          <div class="campaign-image"></div>
+          <div class="campaign-content">
+            <p class="campaign-category"><%= campaign.category %></p>
+            <h2><a href="/campaigns/<%= campaign_id %>" class="campaign-title-link"><%= campaign.title %></a></h2>
+            <p><%= campaign.description %></p>
+            <div class="campaign-progress" aria-label="Fremgang <%= progress %> procent">
+              <div class="campaign-progress-fill" style="width: <%= progress %>%;"></div>
+            </div>
+            <div class="campaign-meta">
+              <span><%= collected %> kr af <%= campaign.goal %> kr</span>
+              <a href="/campaigns/<%= campaign_id %>" class="card-link">Se kampagne</a>
+            </div>
+          </div>
+        </article>
+      <% end %>
+    </section>
+  </main>
+</body>
+</html>
