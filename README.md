@@ -41,6 +41,17 @@ ruby app.rb
 
 Besøg: `http://localhost:4567`
 
+## TDD Light Start
+
+Første test er en request-spec for forsiden:
+- `spec/requests/home_spec.rb` sikrer at `GET /` returnerer `200`.
+
+Kør testen med:
+
+```bash
+bundle exec rspec spec/requests/home_spec.rb
+```
+
 ## Pre-commit Code Review
 
 Aktiver pre-commit hook lokalt (kør én gang):

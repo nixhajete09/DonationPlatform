@@ -42,6 +42,17 @@ ruby app.rb
 
 Besog: http://localhost:4567
 
+## TDD light start
+
+Forste test er en request-spec for forsiden:
+- spec/requests/home_spec.rb sikrer at GET / returnerer 200.
+
+Kor testen med:
+
+```bash
+bundle exec rspec spec/requests/home_spec.rb
+```
+
 ## Pre-commit code review
 
 Aktiver hooks lokalt (kor en gang):
@@ -75,6 +86,7 @@ Reek korer kun i pull request workflow (advisory), ikke i pre-commit.
 - ADR 0001 documenting the pull request checks decision.
 - .rubocop.yml baseline config (NewCops: disable).
 - Reek advisory check pa pull requests (ikke i pre-commit).
+- First request-spec for GET / added (TDD light baseline).
 
 ## ADR 0001: Pull Request Workflow Checks
 
