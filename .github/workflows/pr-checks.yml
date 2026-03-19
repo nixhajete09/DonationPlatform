@@ -20,5 +20,9 @@ jobs:
       - name: Run RuboCop
         run: bundle exec rubocop --fail-level E --display-only-fail-level-offenses
 
+      - name: Run Reek (advisory)
+        continue-on-error: true
+        run: bundle exec reek app app.rb
+
       - name: Run RSpec
         run: bundle exec rspec
