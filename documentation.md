@@ -41,6 +41,18 @@ ruby app.rb
 
 Besog: http://localhost:4567
 
+## Pre-commit code review
+
+Aktiver hooks lokalt (kor en gang):
+
+```bash
+git config core.hooksPath .githooks
+```
+
+Pre-commit korer:
+- bundle exec rubocop --fail-level E --display-only-fail-level-offenses
+- bundle exec rspec
+
 ## Features (i udvikling)
 
 - [ ] Kampagneoprettelse og -styring

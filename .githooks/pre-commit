@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+set -e
+
+repo_root="$(git rev-parse --show-toplevel)"
+cd "$repo_root" || exit 1
+
+echo "Running pre-commit checks..."
+bundle exec rubocop --fail-level E --display-only-fail-level-offenses
+bundle exec rspec
+echo "Pre-commit checks passed."

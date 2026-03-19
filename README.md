@@ -40,6 +40,18 @@ ruby app.rb
 
 Besøg: `http://localhost:4567`
 
+## Pre-commit Code Review
+
+Aktiver pre-commit hook lokalt (kør én gang):
+
+```bash
+git config core.hooksPath .githooks
+```
+
+Hooks kører automatisk før commit:
+- `bundle exec rubocop --fail-level E --display-only-fail-level-offenses`
+- `bundle exec rspec`
+
 ## Features (i udvikling)
 
 - [ ] Kampagneoprettelse og -styring
@@ -52,4 +64,4 @@ Besøg: `http://localhost:4567`
 
 ## Dokumentation
 
-Se `/docs` for arkitektur-beslutninger, skaleringsplan (v2) og vibecodingproces.
+Se `documentation.md` for samlet dokumentation.
