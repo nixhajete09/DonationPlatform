@@ -11,6 +11,7 @@ DonationPlatform er en donationsplatform bygget med Ruby og Sinatra, designet ti
 - Frontend: HTML, CSS, JavaScript
 - Testing: RSpec, Rack::Test
 - CI: GitHub Actions (RuboCop + RSpec pa pull requests)
+- Code smell review: Reek (advisory pa pull requests)
 
 ## Projektstruktur
 
@@ -53,6 +54,8 @@ Pre-commit korer:
 - bundle exec rubocop --fail-level E --display-only-fail-level-offenses
 - bundle exec rspec
 
+Reek korer kun i pull request workflow (advisory), ikke i pre-commit.
+
 ## Features (i udvikling)
 
 - [ ] Kampagneoprettelse og -styring
@@ -71,6 +74,7 @@ Pre-commit korer:
 - GitHub Actions workflow for pull request checks (rubocop --fail-level E + rspec).
 - ADR 0001 documenting the pull request checks decision.
 - .rubocop.yml baseline config (NewCops: disable).
+- Reek advisory check pa pull requests (ikke i pre-commit).
 
 ## ADR 0001: Pull Request Workflow Checks
 
@@ -81,6 +85,7 @@ Pre-commit korer:
 We run automated checks on every pull request using GitHub Actions.
 The checks are:
 - bundle exec rubocop --fail-level E --display-only-fail-level-offenses
+- bundle exec reek app app.rb (advisory)
 - bundle exec rspec
 
 ### Why

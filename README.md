@@ -10,6 +10,7 @@ DonationPlatform er en donationsplatform bygget med Ruby og Sinatra, designet ti
 - **Database**: SQLite (udvikling), PostgreSQL (produktion)
 - **Frontend**: HTML, CSS, JavaScript
 - **Testing**: RSpec, Rack::Test
+- **Code Smell Review**: Reek (korer i pull requests)
 
 ## Projektstruktur
 
@@ -51,6 +52,8 @@ git config core.hooksPath .githooks
 Hooks kører automatisk før commit:
 - `bundle exec rubocop --fail-level E --display-only-fail-level-offenses`
 - `bundle exec rspec`
+
+Reek korer kun i pull request workflow (advisory), ikke i pre-commit.
 
 ## Features (i udvikling)
 
