@@ -41,6 +41,15 @@ ruby app.rb
 
 Besøg: `http://localhost:4567`
 
+## Kør med Docker
+
+```bash
+# Build og start app
+docker compose up --build
+```
+
+Besøg: `http://localhost:4567`
+
 ## Pre-commit Code Review
 
 Aktiver pre-commit hook lokalt (kør én gang):
@@ -68,3 +77,7 @@ Reek korer kun i pull request workflow (advisory), ikke i pre-commit.
 ## Dokumentation
 
 Se `documentation.md` for samlet dokumentation.
+
+Løbende beslutninger og ændringer:
+- ADR: `docs/adr/`
+- Changelog: `CHANGELOG.md`

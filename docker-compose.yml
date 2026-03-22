@@ -1,0 +1,12 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4567:4567"
+    volumes:
+      - .:/app
+    environment:
+      RACK_ENV: development
+    command: bundle exec ruby app.rb -o 0.0.0.0 -p 4567

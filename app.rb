@@ -2,8 +2,10 @@ require 'sinatra'
 require 'sinatra/contrib'
 require 'sequel'
 require 'dotenv/load'
+require 'fileutils'
 
 # Database setup
+FileUtils.mkdir_p('db')
 DB = Sequel.connect('sqlite://db/donation_platform.db')
 
 # Models directory
