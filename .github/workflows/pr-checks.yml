@@ -1,0 +1,28 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Run RuboCop
+        run: bundle exec rubocop --fail-level E --display-only-fail-level-offenses
+
+      - name: Run Reek (advisory)
+        continue-on-error: true
+        run: bundle exec reek app app.rb
+
+      - name: Run RSpec
+        run: bundle exec rspec
