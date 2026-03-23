@@ -62,3 +62,4 @@ post '/opret' do
   puts params.inspect
   "Kampagnen '#{params[:titel]}' er modtaget!"
 end
+
