@@ -9,7 +9,8 @@ gem 'dotenv', '~> 2.8'
 gem 'bcrypt', '~> 3.1'
 
 group :development, :test do
-  gem 'rspec', '~> 3.12'
   gem 'rack-test', '~> 2.0'
+  gem 'reek', '~> 6.3'
+  gem 'rspec', '~> 3.12'
   gem 'rubocop', '~> 1.50'
 end
