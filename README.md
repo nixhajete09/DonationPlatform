@@ -55,6 +55,19 @@ Hooks kører automatisk før commit:
 
 Reek korer kun i pull request workflow (advisory), ikke i pre-commit.
 
+## Lokal CI-check (uden act)
+
+Koer hele den lokale check-sekvens med en kommando:
+
+```powershell
+.\scripts\local-ci-check.ps1
+```
+
+Valgfrie flags:
+- `-SkipBundleInstall` (hvis gems allerede er installeret)
+- `-SkipDockerBuild` (hvis du kun vil koere Ruby checks)
+- `-RunDockerSmokeTest` (starter container kort og laver HTTP smoke test)
+
 ## Features (i udvikling)
 
 - [ ] Kampagneoprettelse og -styring
