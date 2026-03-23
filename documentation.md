@@ -56,6 +56,21 @@ Pre-commit korer:
 
 Reek korer kun i pull request workflow (advisory), ikke i pre-commit.
 
+## Lokal CI-check (uden act)
+
+Der er et helper-script til lokal validering af samme checks som i PR-flowet.
+
+Koer:
+
+```powershell
+.\scripts\local-ci-check.ps1
+```
+
+Valgfrie flags:
+- `-SkipBundleInstall`
+- `-SkipDockerBuild`
+- `-RunDockerSmokeTest`
+
 ## Features (i udvikling)
 
 - [ ] Kampagneoprettelse og -styring
