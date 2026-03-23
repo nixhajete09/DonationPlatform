@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Log ind eller Opret - Danmarks Donation</title>
+    <link rel="stylesheet" href="/ui/login.css">
+</head>
+<body class="auth-page">
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-section">
+                <span class="logo-main">Danmarks Donation</span>
+            </div>
+            <div class="nav-links">
+                <a href="#">Søg</a>
+                <a href="#">Projekter</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="auth-wrapper">
+        <div class="auth-grid">
+            
+            <section class="auth-col">
+                <h2>Log ind</h2>
+                <p>Velkommen tilbage. Log ind for at administrere dine indsamlinger.</p>
+                
+                <% if @login_error %>
+                    <div class="error-box"><%= @login_error %></div>
+                <% end %>
+
+                <form action="/login" method="POST">
+                    <div class="input-group">
+                        <label>Brugernavn</label>
+                        <input type="text" name="brugernavn" placeholder="navn / mailadresse" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Adgangskode</label>
+                        <input type="password" name="kode" placeholder="Indtast kode" required>
+                    </div>
+                    <button type="submit" class="btn-auth">Log ind</button>
+                    <a href="#" class="forgot-link">Glemt adgangskode?</a>
+                </form>
+            </section>
+
+            <div class="auth-divider"></div>
+
+            <section class="auth-col">
+                <h2>Opret konto</h2>
+                <p>Ny her? Opret en konto på under et minut og start din første donation.</p>
+
+                <% if @signup_error %>
+                    <div class="error-box"><%= @signup_error %></div>
+                <% end %>
+
+                <form action="/signup" method="POST">
+                    <div class="input-group">
+                        <label>Vælg brugernavn</label>
+                        <input type="text" name="brugernavn" placeholder="Hvad skal vi kalde dig?" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Vælg adgangskode</label>
+                        <input type="password" name="kode" placeholder="Mindst 6 tegn" required>
+                    </div>
+                    <button type="submit" class="btn-auth btn-secondary">Opret bruger</button>
+                </form>
+            </section>
+
+        </div>
+    </main>
+
+</body>
+</html>

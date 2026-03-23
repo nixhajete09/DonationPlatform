@@ -1,0 +1,74 @@
+.auth-wrapper {
+    max-width: 1000px;
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.auth-grid {
+    display: flex;
+    gap: 80px;
+    background: white;
+    padding: 60px;
+    border: 1px solid #eee;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    position: relative;
+}
+
+.auth-col {
+    flex: 1;
+}
+
+.auth-col h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.auth-col p {
+    color: #666;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.auth-divider {
+    width: 1px;
+    background: #eee;
+}
+
+.btn-auth {
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.btn-auth { background: #2b59c3; color: white; }
+.btn-secondary { background: #445a74; }
+
+.error-box {
+    background: #fff0f0;
+    color: #d93025;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    border: 1px solid #fadad7;
+}
+
+.forgot-link {
+    display: block;
+    margin-top: 15px;
+    color: #2b59c3;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+/* Responsiv: Stak dem ovenpå hinanden på mobilen */
+@media (max-width: 768px) {
+    .auth-grid { flex-direction: column; gap: 40px; padding: 30px; }
+    .auth-divider { height: 1px; width: 100%; }
+}
