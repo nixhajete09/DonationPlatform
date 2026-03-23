@@ -55,12 +55,53 @@
             Doner anonymt
           </label>
 
+          <label class="checkbox-row" for="tax_deduction">
+            <input
+              id="tax_deduction"
+              name="tax_deduction"
+              type="checkbox"
+              value="1"
+              <%= @tax_deduction_selected ? 'checked' : '' %>
+            >
+            Jeg vil have skattefradrag
+          </label>
+
+          <div id="cpr-field-group" class="tax-cpr-group <%= @tax_deduction_selected ? '' : 'is-hidden' %>">
+            <label for="cpr">CPR-nummer (10 cifre)</label>
+            <input
+              id="cpr"
+              name="cpr"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]{10}"
+              maxlength="10"
+              placeholder="ddmmååxxxx"
+            >
+          </div>
+
           <button type="submit" class="btn-primary">Bekraeft donation</button>
         </form>
-
-        <a href="/campaigns" class="card-link">Tilbage til kampagner</a>
       </div>
+
+      <a href="/campaigns" class="card-link detail-back-link">Tilbage til kampagner</a>
     </section>
   </main>
+
+  <script>
+    const taxDeductionCheckbox = document.getElementById('tax_deduction');
+    const cprFieldGroup = document.getElementById('cpr-field-group');
+    const cprInput = document.getElementById('cpr');
+
+    if (taxDeductionCheckbox && cprFieldGroup && cprInput) {
+      const toggleCprField = () => {
+        const isChecked = taxDeductionCheckbox.checked;
+        cprFieldGroup.classList.toggle('is-hidden', !isChecked);
+        cprInput.required = isChecked;
+      };
+
+      taxDeductionCheckbox.addEventListener('change', toggleCprField);
+      toggleCprField();
+    }
+  </script>
 </body>
 </html>

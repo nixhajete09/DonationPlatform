@@ -322,6 +322,19 @@ body {
   text-align: center;
 }
 
+.tax-cpr-group {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.detail-back-link {
+  margin-top: 0.6rem;
+}
+
 @media (max-width: 640px) {
   .page-content {
     padding: 1.2rem 0.9rem 2rem;
