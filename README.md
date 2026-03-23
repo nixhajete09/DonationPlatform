@@ -1,5 +1,7 @@
 # DonationPlatform - En sikker og transparent donationsplatform
 
+[![Pull Request Checks](https://github.com/nixhajete09/DonationPlatform/actions/workflows/pr-checks.yml/badge.svg)](https://github.com/nixhajete09/DonationPlatform/actions/workflows/pr-checks.yml)
+
 ## Oversigt
 
 DonationPlatform er en donationsplatform bygget med Ruby og Sinatra, designet til at gøre det nemt og sikkert for velgørende organisationer, foreninger og enkeltpersoner at samle ind til deres formål.
@@ -10,6 +12,7 @@ DonationPlatform er en donationsplatform bygget med Ruby og Sinatra, designet ti
 - **Database**: SQLite (udvikling), PostgreSQL (produktion)
 - **Frontend**: HTML, CSS, JavaScript
 - **Testing**: RSpec, Rack::Test
+- **Code Smell Review**: Reek (korer i pull requests)
 
 ## Projektstruktur
 
@@ -40,6 +43,20 @@ ruby app.rb
 
 Besøg: `http://localhost:4567`
 
+## Pre-commit Code Review
+
+Aktiver pre-commit hook lokalt (kør én gang):
+
+```bash
+git config core.hooksPath .githooks
+```
+
+Hooks kører automatisk før commit:
+- `bundle exec rubocop --fail-level E --display-only-fail-level-offenses`
+- `bundle exec rspec`
+
+Reek korer kun i pull request workflow (advisory), ikke i pre-commit.
+
 ## Features (i udvikling)
 
 - [ ] Kampagneoprettelse og -styring
@@ -52,4 +69,4 @@ Besøg: `http://localhost:4567`
 
 ## Dokumentation
 
-Se `/docs` for arkitektur-beslutninger, skaleringsplan (v2) og vibecodingproces.
+Se `documentation.md` for samlet dokumentation.
