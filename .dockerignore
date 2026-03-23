@@ -1,0 +1,12 @@
+.git
+.github
+.githooks
+.bundle
+vendor/bundle
+log
+tmp
+coverage
+spec
+README.md
+documentation.md
+docs
