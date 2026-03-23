@@ -12,7 +12,7 @@
         <div class="nav-container">
             <div class="logo-section">
                 <span class="logo-main">Danmarks Donation</span>
-                <span class="logo-sub">Vores platform – Sørger for gennemsigtighed</span>
+                <span class="logo-sub">Stats platform – Sørger for gennemsigtighed</span>
             </div>
             <div class="nav-links">
                 <a href="#">Søg</a>
@@ -30,10 +30,11 @@
                 <h2>Giv din kampagne en god start</h2>
                 <p class="subtitle">Udfyld nedenstående detaljer for at oprette en ny indsamlingskampagne. Alle indsamlinger gennemgås og godkendes af staten.</p>
 
-                <form action="/opret" method="POST">
+                <form action="/opret" method="POST" enctype="multipart/form-data">
+                    
                     <div class="form-group">
-                        <label>Titel</label>
-                        <input type="text" name="titel" id="input-titel" placeholder="Skriv din titel her...">
+                        <label for="input-titel">Titel</label>
+                        <input type="text" name="titel" id="input-titel" placeholder="Skriv din titel her..." required>
                     </div>
 
                     <div class="row">
@@ -47,10 +48,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Beløbsmål</label>
-                            <div class="currency-input">
-                                <input type="number" name="beloeb" id="input-beloeb" placeholder="kr">
-                            </div>
+                            <label for="input-beloeb">Beløbsmål</label>
+                            <input type="number" name="beloeb" id="input-beloeb" placeholder="kr" required>
                         </div>
                     </div>
 
@@ -64,11 +63,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Beskrivelse</label>
-                        <textarea name="beskrivelse" id="input-beskrivelse" rows="4"></textarea>
+                        <label for="input-beskrivelse">Beskrivelse</label>
+                        <textarea name="beskrivelse" id="input-beskrivelse" rows="4" placeholder="Beskriv formålet..."></textarea>
                     </div>
 
-                    <div class="upload-zone">
+                    <label>Upload billede</label>
+                    <div class="upload-zone" id="drop-zone">
+                        <input type="file" name="billede" id="file-input" accept="image/*" hidden>
                         <p>Træk et billede hertil eller <strong>vælg fil</strong></p>
                         <span>JPEG eller PNG, maks 5 MB</span>
                     </div>
@@ -85,18 +86,23 @@
             <aside class="preview-section">
                 <h3>Forhåndsvisning af kampagne</h3>
                 <div class="preview-card">
+                    <div class="preview-media" id="preview-media-container">
+                        <img id="preview-img" src="https://via.placeholder.com/400x250?text=Kort+over+København" alt="Preview">
+                    </div>
                     <div class="card-body">
                         <h4 id="preview-titel">Din kampagne titel</h4>
                         <p id="preview-beskrivelse" class="preview-desc">Beskrivelse af hvad jeg samler ind til...</p>
                         
                         <div class="progress-container">
-                            <span class="progress-text"><strong>0 kr</strong> af <span id="preview-maale">0</span> kr</span>
+                            <p class="progress-stats">
+                                <strong>0 kr</strong> af <span id="preview-maale">0</span> kr
+                            </p>
                             <div class="progress-bar"><div class="fill"></div></div>
                         </div>
 
                         <div class="card-footer">
                             <span>❤️ 0 donationer</span>
-                            <button type="button" class="btn-doner">Donér</button>
+                            <button type="button" class="btn-doner" disabled>Donér</button>
                         </div>
                     </div>
                 </div>
