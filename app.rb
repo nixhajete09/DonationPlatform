@@ -319,5 +319,5 @@ get '/' do
     selected_category: @selected_category,
     query: @query
   )
-  erb :index
+  erb :home
 end

@@ -15,11 +15,11 @@ get '/campaigns' do
 end
 
 get '/campaigns/new' do
-  erb :'campaigns/new'
+  erb :'campaigns/create'
 end
 
 get '/indsamling' do
-  erb :'campaigns/new'
+  erb :'campaigns/create'
 end
 
 get '/campaigns/:id' do

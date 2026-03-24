@@ -2,7 +2,7 @@
 
 # Auth routes
 get '/auth' do
-  erb :auth
+  erb :authentication
 end
 
 get '/opret' do
@@ -17,7 +17,7 @@ post '/login' do
     redirect '/'
   else
     @login_error = 'Forkert brugernavn eller kode.'
-    erb :auth
+    erb :authentication
   end
 end
 
@@ -31,9 +31,9 @@ post '/signup' do
     redirect '/'
   rescue Sequel::UniqueConstraintViolation
     @signup_error = 'Dette navn er allerede optaget.'
-    erb :auth
+    erb :authentication
   rescue StandardError => e
     @signup_error = "Der skete en fejl: #{e.message}"
-    erb :auth
+    erb :authentication
   end
 end

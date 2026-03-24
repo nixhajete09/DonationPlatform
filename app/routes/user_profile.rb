@@ -17,5 +17,5 @@ get '/profile' do
     { campaign: 'Dyreværn i kulden', amount: 800, date: '2026-03-12', tax_deduction: false }
   ]
 
-  erb :profile
+  erb :user_profile
 end
