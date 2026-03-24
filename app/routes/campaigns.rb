@@ -1,6 +1,18 @@
 # Campaigns routes
 get '/campaigns' do
-  @campaigns = featured_campaigns
+  @query = params[:q].to_s.strip
+  campaigns = featured_campaigns
+
+  unless @query.empty?
+    search = @query.downcase
+    campaigns = campaigns.select do |campaign|
+      [campaign.title, campaign.description, campaign.category].any? do |value|
+        value.to_s.downcase.include?(search)
+      end
+    end
+  end
+
+  @campaigns = campaigns
   erb :'campaigns/index'
 end
 

@@ -22,28 +22,43 @@
     <section class="detail-card">
       <h1>Kampagner</h1>
       <p class="detail-description">Vælg en kampagne for at se flere detaljer.</p>
+
+      <form action="/campaigns" method="get" class="campaign-search-form" role="search" aria-label="Sog kampagner">
+        <input
+          type="search"
+          name="q"
+          value="<%= @query %>"
+          placeholder="Sog efter kampagne, kategori eller formaal"
+          class="campaign-search-input"
+        >
+        <button type="submit" class="campaign-search-button">Sog</button>
+      </form>
     </section>
 
     <section class="campaign-grid" aria-label="Kampagneliste">
-      <% @campaigns.each_with_index do |campaign, index| %>
-        <% campaign_id = campaign.id || (index + 1) %>
-        <% collected = example_collected_amount(campaign.goal) %>
-        <% progress = progress_percentage(collected, campaign.goal) %>
-        <article class="campaign-card">
-          <div class="campaign-image"></div>
-          <div class="campaign-content">
-            <p class="campaign-category"><%= campaign.category %></p>
-            <h2><a href="/campaigns/<%= campaign_id %>" class="campaign-title-link"><%= campaign.title %></a></h2>
-            <p><%= campaign.description %></p>
-            <div class="campaign-progress" aria-label="Fremgang <%= progress %> procent">
-              <div class="campaign-progress-fill" style="width: <%= progress %>%;"></div>
+      <% if @campaigns.empty? %>
+        <p class="empty-state">Ingen kampagner matcher din sogning.</p>
+      <% else %>
+        <% @campaigns.each_with_index do |campaign, index| %>
+          <% campaign_id = campaign.id || (index + 1) %>
+          <% collected = example_collected_amount(campaign.goal) %>
+          <% progress = progress_percentage(collected, campaign.goal) %>
+          <article class="campaign-card">
+            <div class="campaign-image"></div>
+            <div class="campaign-content">
+              <p class="campaign-category"><%= campaign.category %></p>
+              <h2><a href="/campaigns/<%= campaign_id %>" class="campaign-title-link"><%= campaign.title %></a></h2>
+              <p><%= campaign.description %></p>
+              <div class="campaign-progress" aria-label="Fremgang <%= progress %> procent">
+                <div class="campaign-progress-fill" style="width: <%= progress %>%;"></div>
+              </div>
+              <div class="campaign-meta">
+                <span><%= collected %> kr af <%= campaign.goal %> kr</span>
+                <a href="/campaigns/<%= campaign_id %>" class="card-link">Se kampagne</a>
+              </div>
             </div>
-            <div class="campaign-meta">
-              <span><%= collected %> kr af <%= campaign.goal %> kr</span>
-              <a href="/campaigns/<%= campaign_id %>" class="card-link">Se kampagne</a>
-            </div>
-          </div>
-        </article>
+          </article>
+        <% end %>
       <% end %>
     </section>
   </main>
