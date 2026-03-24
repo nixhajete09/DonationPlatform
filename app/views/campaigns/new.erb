@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opret Kampagne - DonationPlatform</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container" aria-label="Hovedmenu">
+      <a class="brand" href="/">Danmarks Donation</a>
+      <ul class="nav-links">
+        <li><a href="/campaigns">Kampagner</a></li>
+        <li><a href="/campaigns/new">Opret kampagne</a></li>
+        <li><a href="/profile">Log ind</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <section class="detail-card">
+      <h1>Opret kampagne</h1>
+      <p class="detail-description">Udfyld felterne herunder. Du kan indsætte et billedlink, så kortet får et rigtigt billede.</p>
+
+      <% if @form_error && !@form_error.empty? %>
+        <p class="alert alert-error"><%= @form_error %></p>
+      <% end %>
+
+      <form action="/campaigns" method="post" class="donation-form campaign-create-form">
+        <label for="title">Titel</label>
+        <input id="title" name="title" type="text" value="<%= @form_values[:title] %>" required>
+
+        <label for="description">Beskrivelse</label>
+        <input id="description" name="description" type="text" value="<%= @form_values[:description] %>" required>
+
+        <label for="goal">Mål (kr)</label>
+        <input id="goal" name="goal" type="number" min="1" step="1" value="<%= @form_values[:goal] %>" required>
+
+        <label for="category">Kategori</label>
+        <select id="category" name="category" required>
+          <option value="">Vælg kategori</option>
+          <% @categories.each do |category| %>
+            <option value="<%= category %>" <%= @form_values[:category] == category ? 'selected' : '' %>><%= category %></option>
+          <% end %>
+        </select>
+
+        <label for="image_url">Billedlink (URL)</label>
+        <input
+          id="image_url"
+          name="image_url"
+          type="url"
+          placeholder="https://..."
+          value="<%= @form_values[:image_url] %>"
+        >
+        <p class="form-help">Tip: Brug et link der starter med https://</p>
+
+        <button type="submit" class="btn-primary">Gem kampagne</button>
+      </form>
+
+      <a href="/campaigns" class="card-link detail-back-link">Tilbage til kampagner</a>
+    </section>
+  </main>
+
+  <%= erb :'shared/footer', layout: false %>
+</body>
+</html>
