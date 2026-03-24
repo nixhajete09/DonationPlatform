@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log ind - DonationPlatform</title>
+    <link rel="stylesheet" href="/css/site.css?v=20260324-10">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="nav-container" aria-label="Hovedmenu">
+            <a class="brand" href="/">Danmarks Donation</a>
+            <ul class="nav-links">
+                <li><a href="/#campaign-list">Kampagner</a></li>
+                <li><a href="/campaigns/new">Opret indsamling</a></li>
+                <li>
+                    <a href="<%= account_link_path %>" class="account-link">
+                        <span class="lock-icon <%= account_lock_state %>" aria-hidden="true"><span class="lock-keyhole"></span></span>
+                        <span><%= account_link_label %></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <section class="detail-card">
+            <h1>Opret konto eller log ind</h1>
+            <p class="detail-description">Alt samlet på en enkel side, så du hurtigt kan komme i gang med at donere eller oprette din egen indsamling.</p>
+        </section>
+
+        <% if @signup_error %>
+            <p class="alert alert-error"><%= @signup_error %></p>
+        <% end %>
+        <% if @login_error %>
+            <p class="alert alert-error"><%= @login_error %></p>
+        <% end %>
+
+        <section class="auth-layout" aria-label="Autentificering">
+            <article class="detail-card">
+                <h2>Opret konto</h2>
+                <p class="detail-description">Ny bruger? Opret en konto på få sekunder.</p>
+                <form action="/signup" method="POST" class="donation-form campaign-create-form">
+                    <label for="signup-brugernavn">Vælg brugernavn</label>
+                    <input id="signup-brugernavn" type="text" name="brugernavn" placeholder="Navn eller mailadresse" required>
+
+                    <label for="signup-kode">Vælg adgangskode</label>
+                    <input id="signup-kode" type="password" name="kode" placeholder="Mindst 6 tegn" required>
+
+                    <button type="submit" class="btn-secondary">Opret bruger</button>
+                </form>
+            </article>
+
+            <article class="detail-card">
+                <h2>Log ind</h2>
+                <p class="detail-description">Velkommen tilbage. Log ind for at se dine kampagner og profil.</p>
+                <form action="/login" method="POST" class="donation-form campaign-create-form">
+                    <label for="login-brugernavn">Brugernavn</label>
+                    <input id="login-brugernavn" type="text" name="brugernavn" placeholder="Navn eller mailadresse" required>
+
+                    <label for="login-kode">Adgangskode</label>
+                    <input id="login-kode" type="password" name="kode" placeholder="Indtast din kode" required>
+
+                    <button type="submit" class="btn-primary">Log ind</button>
+                </form>
+            </article>
+        </section>
+    </main>
+
+    <%= erb :'shared/footer', layout: false %>
+</body>
+</html>

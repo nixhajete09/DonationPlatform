@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Min profil - DonationPlatform</title>
+  <link rel="stylesheet" href="/css/site.css?v=20260324-11">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container" aria-label="Hovedmenu">
+      <a class="brand" href="/">Danmarks Donation</a>
+      <ul class="nav-links">
+        <li><a href="/#campaign-list">Kampagner</a></li>
+        <li><a href="/campaigns/new">Opret indsamling</a></li>
+        <li>
+          <a href="<%= account_link_path %>" class="account-link">
+            <span class="lock-icon <%= account_lock_state %>" aria-hidden="true"><span class="lock-keyhole"></span></span>
+            <span><%= account_link_label %></span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <section class="detail-card profile-header-card">
+      <div class="profile-header-row">
+        <div class="profile-header-badge" aria-label="Brugerprofil">
+          <span class="profile-header-icon" aria-hidden="true"><span class="lock-icon open"><span class="lock-keyhole"></span></span></span>
+          <div>
+            <p class="profile-header-label">Konto</p>
+            <h1><%= @profile_handle %></h1>
+          </div>
+        </div>
+
+        <form action="/logout" method="post" class="logout-form">
+          <button type="submit" class="btn-secondary logout-button">Log ud</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="campaign-grid profile-overview-grid" aria-label="Profiloversigt">
+      <article class="campaign-card">
+        <div class="campaign-content">
+          <p class="campaign-category">Donationer</p>
+          <h2>I alt doneret</h2>
+          <p><strong><%= @total_donated %> kr</strong></p>
+        </div>
+      </article>
+
+      <article class="campaign-card">
+        <div class="campaign-content">
+          <p class="campaign-category">Skat</p>
+          <h2>Fradragsberettiget</h2>
+          <p><strong><%= @tax_deduction_total %> kr</strong></p>
+        </div>
+      </article>
+
+      <article class="campaign-card">
+        <div class="campaign-content">
+          <p class="campaign-category">Handlinger</p>
+          <h2>Hurtige links</h2>
+          <p><a href="/#campaign-list" class="card-link">Find nye kampagner</a></p>
+          <p><a href="#" class="card-link">Se skattekvitteringer</a></p>
+        </div>
+      </article>
+    </section>
+
+    <section class="detail-card">
+      <h2>Mine indsamlinger</h2>
+      <p class="detail-description">Dine oprettede indsamlinger vises her.</p>
+
+      <% if @owned_campaigns.nil? || @owned_campaigns.empty? %>
+        <p class="empty-state">Du har ikke oprettet en indsamling endnu.</p>
+      <% else %>
+        <% @owned_campaigns.each do |campaign| %>
+          <article class="campaign-card" style="margin-bottom: 0.8rem;">
+            <div class="campaign-content">
+              <p class="campaign-category"><%= campaign[:category] %></p>
+              <h3><a href="/campaigns/<%= campaign[:id] %>" class="campaign-title-link"><%= campaign[:title] %></a></h3>
+              <p><%= campaign[:description] %></p>
+              <p><strong>Mål:</strong> <%= campaign[:goal] %> kr</p>
+            </div>
+          </article>
+        <% end %>
+      <% end %>
+    </section>
+
+    <section class="detail-card">
+      <h2>Donationer</h2>
+      <p class="empty-state">Donationshistorik bliver tilføjet i næste version.</p>
+    </section>
+  </main>
+
+  <%= erb :'shared/footer', layout: false %>
+</body>
+</html>

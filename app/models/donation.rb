@@ -1,13 +1,23 @@
+# frozen_string_literal: true
+
 class Donation
-  # Donation model
+  # Donation model used by unit tests and amount validation logic.
   attr_accessor :id, :campaign_id, :donor_id, :amount, :anonymous, :created_at
 
-  def initialize(id: nil, campaign_id:, donor_id:, amount:, anonymous: false, created_at: nil)
+  def initialize(campaign_id:, donor_id:, amount:, id: nil, anonymous: false, created_at: nil)
     @id = id
     @campaign_id = campaign_id
     @donor_id = donor_id
     @amount = amount
     @anonymous = anonymous
     @created_at = created_at
+  end
+
+  def valid_amount?
+    return false if amount.nil?
+
+    amount.to_f.positive?
+  rescue StandardError
+    false
   end
 end

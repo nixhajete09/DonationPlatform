@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= @campaign.title %> - DonationPlatform</title>
+  <link rel="stylesheet" href="/css/site.css?v=20260324-10">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container" aria-label="Hovedmenu">
+      <a class="brand" href="/">Danmarks Donation</a>
+      <ul class="nav-links">
+        <li><a href="/#campaign-list">Kampagner</a></li>
+        <li><a href="/campaigns/new">Opret indsamling</a></li>
+        <li>
+          <a href="<%= account_link_path %>" class="account-link">
+            <span class="lock-icon <%= account_lock_state %>" aria-hidden="true"><span class="lock-keyhole"></span></span>
+            <span><%= account_link_label %></span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <section class="detail-card">
+      <% if @donation_status == 'success' %>
+        <p class="alert alert-success">Tak for din donation på <%= @donation_amount %> kr.</p>
+        <% if @donation_email_status == 'smtp' %>
+          <p class="alert alert-success">Kvittering er sendt til din email.</p>
+        <% elsif @donation_email_status == 'simulated' %>
+          <p class="alert alert-info">Email er simuleret lokalt (se tmp/sent_emails.log).</p>
+        <% elsif @donation_email_status == 'failed' %>
+          <p class="alert alert-error">Email kunne ikke sendes. Donation er stadig registreret.</p>
+        <% end %>
+      <% elsif @donation_status == 'error' %>
+        <p class="alert alert-error"><%= @donation_error || 'Noget gik galt. Prøv igen.' %></p>
+      <% end %>
+
+      <p class="campaign-category"><%= @campaign.category %></p>
+      <h1><%= @campaign.title %></h1>
+      <p class="detail-description"><%= @campaign.description %></p>
+
+      <div class="campaign-progress" aria-label="Fremgang <%= @progress %> procent">
+        <div class="campaign-progress-fill" style="width: <%= @progress %>%;"></div>
+      </div>
+
+      <div class="detail-stats">
+        <p><strong>Indsamlet:</strong> <%= @collected %> kr</p>
+        <p><strong>Mål:</strong> <%= @campaign.goal %> kr</p>
+      </div>
+
+      <div class="detail-actions">
+        <form action="/campaigns/<%= @campaign.id %>/donations" method="post" class="donation-form">
+          <label for="amount">Beløb (kr)</label>
+          <input id="amount" name="amount" type="number" min="1" step="1" required>
+
+          <label for="donor_name">Navn</label>
+          <input id="donor_name" name="donor_name" type="text" placeholder="Dit navn">
+
+          <label for="donor_email">Email (valgfri)</label>
+          <input id="donor_email" name="donor_email" type="email" placeholder="dig@email.dk">
+          <p class="form-help">Skriv email hvis du vil modtage kvittering og takkemail uden konto.</p>
+
+          <label class="checkbox-row" for="anonymous">
+            <input id="anonymous" name="anonymous" type="checkbox" value="1">
+            Donér anonymt
+          </label>
+
+          <label class="checkbox-row" for="tax_deduction">
+            <input
+              id="tax_deduction"
+              name="tax_deduction"
+              type="checkbox"
+              value="1"
+              <%= @tax_deduction_selected ? 'checked' : '' %>
+            >
+            Jeg vil have skattefradrag
+          </label>
+
+          <div id="cpr-field-group" class="tax-cpr-group <%= @tax_deduction_selected ? '' : 'is-hidden' %>">
+            <label for="cpr">CPR-nummer (10 cifre)</label>
+            <input
+              id="cpr"
+              name="cpr"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]{10}"
+              maxlength="10"
+              placeholder="ddmmååxxxx"
+            >
+          </div>
+
+          <button type="submit" class="btn-primary">Bekræft donation</button>
+        </form>
+      </div>
+
+      <a href="/#campaign-list" class="card-link detail-back-link">Tilbage til kampagner</a>
+    </section>
+  </main>
+
+  <%= erb :'shared/footer', layout: false %>
+
+  <script>
+    const taxDeductionCheckbox = document.getElementById('tax_deduction');
+    const cprFieldGroup = document.getElementById('cpr-field-group');
+    const cprInput = document.getElementById('cpr');
+
+    if (taxDeductionCheckbox && cprFieldGroup && cprInput) {
+      const toggleCprField = () => {
+        const isChecked = taxDeductionCheckbox.checked;
+        cprFieldGroup.classList.toggle('is-hidden', !isChecked);
+        cprInput.required = isChecked;
+      };
+
+      taxDeductionCheckbox.addEventListener('change', toggleCprField);
+      toggleCprField();
+    }
+  </script>
+</body>
+</html>

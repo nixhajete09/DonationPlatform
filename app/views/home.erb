@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DonationPlatform - Samlet ind til formål der betyder noget</title>
+  <link rel="stylesheet" href="/css/site.css?v=20260324-10">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav-container" aria-label="Hovedmenu">
+      <a class="brand" href="/">Danmarks Donation</a>
+      <ul class="nav-links">
+        <li><a href="/#campaign-list">Kampagner</a></li>
+        <li><a href="/campaigns/new">Opret indsamling</a></li>
+        <li>
+          <a href="<%= account_link_path %>" class="account-link">
+            <span class="lock-icon <%= account_lock_state %>" aria-hidden="true"><span class="lock-keyhole"></span></span>
+            <span><%= account_link_label %></span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="page-content">
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="hero-kicker">Tryg og gennemsigtig indsamling</p>
+      <h1 id="hero-title">Støt de sager, der betyder noget</h1>
+      <p class="hero-description">Find verificerede kampagner, følg fremgangen, og donér på under et minut.</p>
+      <a href="#campaign-list" class="btn-primary">Se kampagner</a>
+    </section>
+
+    <section class="search-shell" aria-label="Søgefelt">
+      <form action="/" method="get" class="campaign-search-form" role="search" aria-label="Søg kampagner på forsiden">
+        <input type="hidden" name="category" value="<%= @selected_category || 'Alle' %>">
+        <input
+          type="search"
+          name="q"
+          value="<%= @query %>"
+          placeholder="Søg efter kampagne, kategori eller formål"
+          class="campaign-search-input"
+        >
+        <button type="submit" class="campaign-search-button">Søg</button>
+      </form>
+    </section>
+
+    <section class="categories" aria-label="Kategorier">
+      <% categories = @categories || ['Alle', 'Klima', 'Dyr', 'Sundhed', 'Lokalt'] %>
+      <% selected_category = @selected_category || 'Alle' %>
+      <% categories.each do |category| %>
+        <% active = (selected_category == category) %>
+        <a
+          href="/?category=<%= category %>"
+          class="chip<%= active ? ' chip-active' : '' %>"
+        ><%= category %></a>
+      <% end %>
+    </section>
+
+    <section id="campaign-list" class="campaign-grid" aria-label="Fremhævede kampagner">
+      <% campaigns = @featured_campaigns || [] %>
+      <% if campaigns.empty? %>
+        <p class="empty-state">Ingen kampagner i denne kategori endnu.</p>
+      <% else %>
+        <% campaigns.each_with_index do |campaign, index| %>
+          <% collected = collected_amount_for_campaign(campaign) %>
+          <% progress = progress_percentage(collected, campaign.goal) %>
+          <% campaign_id = campaign.id || (index + 1) %>
+          <article class="campaign-card">
+            <div
+              class="campaign-image"
+              style="<%= campaign.image_url.to_s.strip.empty? ? '' : "background-image: url('" + campaign.image_url + "');" %>"
+            ></div>
+            <div class="campaign-content">
+              <p class="campaign-category"><%= campaign.category %></p>
+              <h2><a href="/campaigns/<%= campaign_id %>" class="campaign-title-link"><%= campaign.title %></a></h2>
+              <p><%= campaign.description %></p>
+              <div class="campaign-progress" aria-label="Fremgang <%= progress %> procent">
+                <div class="campaign-progress-fill" style="width: <%= progress %>%;"></div>
+              </div>
+              <div class="campaign-meta">
+                <span><%= collected %> kr af <%= campaign.goal %> kr</span>
+                <a href="/campaigns/<%= campaign_id %>" class="card-link">Donér</a>
+              </div>
+            </div>
+          </article>
+        <% end %>
+      <% end %>
+    </section>
+  </main>
+
+  <%= erb :'shared/footer', layout: false %>
+</body>
+</html>
