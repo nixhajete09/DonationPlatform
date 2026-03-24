@@ -7,6 +7,19 @@ require 'date'
 # Database setup
 DB = Sequel.connect('sqlite://db/donation_platform.db')
 
+unless DB.table_exists?(:campaigns)
+  DB.create_table :campaigns do
+    primary_key :id
+    String :title, null: false
+    String :description, text: true, null: false
+    Integer :goal, null: false
+    Date :deadline
+    String :category, null: false
+    String :image_url
+    DateTime :created_at, default: Sequel::CURRENT_TIMESTAMP
+  end
+end
+
 # Models directory
 require_relative 'app/models/campaign'
 require_relative 'app/models/donation'
@@ -34,7 +47,8 @@ helpers do
         description: 'Hjælp familier med behandling og praktisk støtte i hverdagen.',
         goal: 10_000,
         deadline: Date.today + 30,
-        category: 'Sundhed'
+        category: 'Sundhed',
+        image_url: 'https://picsum.photos/seed/kraeft/800/450'
       ),
       Campaign.new(
         id: 2,
@@ -42,7 +56,8 @@ helpers do
         description: 'Sammen planter vi nye træer i udsatte områder i Danmark.',
         goal: 10_000,
         deadline: Date.today + 45,
-        category: 'Klima'
+        category: 'Klima',
+        image_url: 'https://picsum.photos/seed/traeer/800/450'
       ),
       Campaign.new(
         id: 3,
@@ -50,7 +65,8 @@ helpers do
         description: 'Støt midlertidige ophold og foder til hjemløse kæledyr.',
         goal: 15_000,
         deadline: Date.today + 20,
-        category: 'Dyr'
+        category: 'Dyr',
+        image_url: 'https://picsum.photos/seed/dyrevaern/800/450'
       ),
       Campaign.new(
         id: 4,
@@ -58,7 +74,8 @@ helpers do
         description: 'Hjælp med madposer og hverdagsvarer til pressede familier.',
         goal: 20_000,
         deadline: Date.today + 25,
-        category: 'Lokalt'
+        category: 'Lokalt',
+        image_url: 'https://picsum.photos/seed/madkasse/800/450'
       ),
       Campaign.new(
         id: 5,
@@ -66,7 +83,8 @@ helpers do
         description: 'Støt gratis samtaler og rådgivning til unge i mistrivsel.',
         goal: 18_000,
         deadline: Date.today + 40,
-        category: 'Sundhed'
+        category: 'Sundhed',
+        image_url: 'https://picsum.photos/seed/trivsel/800/450'
       ),
       Campaign.new(
         id: 6,
@@ -74,7 +92,8 @@ helpers do
         description: 'Bidrag til brønde, filtre og vandtanke i udsatte områder.',
         goal: 30_000,
         deadline: Date.today + 55,
-        category: 'Klima'
+        category: 'Klima',
+        image_url: 'https://picsum.photos/seed/vand/800/450'
       ),
       Campaign.new(
         id: 7,
@@ -82,7 +101,8 @@ helpers do
         description: 'Hjælp skadede dyr med behandling, medicin og transport.',
         goal: 22_000,
         deadline: Date.today + 35,
-        category: 'Dyr'
+        category: 'Dyr',
+        image_url: 'https://picsum.photos/seed/dyrlaege/800/450'
       ),
       Campaign.new(
         id: 8,
@@ -90,7 +110,8 @@ helpers do
         description: 'Støt skoletasker, bøger og udstyr til børn uden ressourcer.',
         goal: 16_000,
         deadline: Date.today + 28,
-        category: 'Lokalt'
+        category: 'Lokalt',
+        image_url: 'https://picsum.photos/seed/skole/800/450'
       ),
       Campaign.new(
         id: 9,
@@ -98,7 +119,8 @@ helpers do
         description: 'Skab lokale byhaver med fællesskab, læring og biodiversitet.',
         goal: 12_000,
         deadline: Date.today + 50,
-        category: 'Klima'
+        category: 'Klima',
+        image_url: 'https://picsum.photos/seed/byhave/800/450'
       ),
       Campaign.new(
         id: 10,
@@ -106,7 +128,8 @@ helpers do
         description: 'Giv ro og omsorg til patienter og familier i svære perioder.',
         goal: 25_000,
         deadline: Date.today + 32,
-        category: 'Sundhed'
+        category: 'Sundhed',
+        image_url: 'https://picsum.photos/seed/hospice/800/450'
       ),
       Campaign.new(
         id: 11,
@@ -114,7 +137,8 @@ helpers do
         description: 'Finansier varme tæpper, soveposer og varme måltider.',
         goal: 27_000,
         deadline: Date.today + 18,
-        category: 'Lokalt'
+        category: 'Lokalt',
+        image_url: 'https://picsum.photos/seed/hjemloese/800/450'
       ),
       Campaign.new(
         id: 12,
@@ -122,13 +146,48 @@ helpers do
         description: 'Støt strandrensning og fjernelse af plastik i kystområder.',
         goal: 21_000,
         deadline: Date.today + 60,
-        category: 'Klima'
+        category: 'Klima',
+        image_url: 'https://picsum.photos/seed/havmiljoe/800/450'
       )
     ]
   end
 
+  def seed_default_campaigns_if_needed
+    return unless DB.table_exists?(:campaigns)
+
+    existing_campaigns = DB[:campaigns].select(:id, :title, :image_url).all
+    existing_by_title = existing_campaigns.each_with_object({}) do |row, hash|
+      hash[row[:title]] = row
+    end
+
+    default_featured_campaigns.each do |campaign|
+      existing = existing_by_title[campaign.title]
+
+      if existing
+        if existing[:image_url].to_s.strip.empty? && !campaign.image_url.to_s.strip.empty?
+          DB[:campaigns].where(id: existing[:id]).update(image_url: campaign.image_url)
+        end
+        next
+      end
+
+      DB[:campaigns].insert(
+        title: campaign.title,
+        description: campaign.description,
+        goal: campaign.goal,
+        deadline: campaign.deadline,
+        category: campaign.category,
+        image_url: campaign.image_url,
+        created_at: Time.now
+      )
+    end
+  rescue Sequel::Error
+    nil
+  end
+
   def featured_campaigns
     return default_featured_campaigns unless DB.table_exists?(:campaigns)
+
+    seed_default_campaigns_if_needed
 
     campaigns = DB[:campaigns]
                 .reverse_order(:created_at)
@@ -142,6 +201,7 @@ helpers do
                     goal: row[:goal].to_i,
                     deadline: row[:deadline],
                     category: row[:category] || 'Andet',
+                    image_url: row[:image_url],
                     created_at: row[:created_at]
                   )
                 end
@@ -179,6 +239,7 @@ helpers do
         goal: row[:goal].to_i,
         deadline: row[:deadline],
         category: row[:category] || 'Andet',
+        image_url: row[:image_url],
         created_at: row[:created_at]
       )
     end

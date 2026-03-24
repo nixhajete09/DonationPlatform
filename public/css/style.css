@@ -165,6 +165,9 @@ body {
 .campaign-image {
   height: clamp(140px, 24vw, 170px);
   background: linear-gradient(120deg, #cbd5e1 0%, #e2e8f0 100%);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .campaign-content {
@@ -341,12 +344,18 @@ body {
 
 .donation-form input[type='text'],
 .donation-form input[type='email'],
-.donation-form input[type='number'] {
+.donation-form input[type='number'],
+.donation-form input[type='url'],
+.donation-form select {
   width: 100%;
   padding: 0.62rem 0.7rem;
   border: 1px solid #cbd5e1;
   border-radius: 10px;
   font-size: 0.92rem;
+}
+
+.campaign-create-form {
+  width: min(100%, 560px);
 }
 
 .checkbox-row {

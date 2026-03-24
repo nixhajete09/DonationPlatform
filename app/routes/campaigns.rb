@@ -1,3 +1,5 @@
+require 'uri'
+
 # Campaigns routes
 get '/campaigns' do
   @query = params[:q].to_s.strip
@@ -20,6 +22,19 @@ get '/campaigns' do
 
   @campaigns = campaigns
   erb :'campaigns/index'
+end
+
+get '/campaigns/new' do
+  @categories = homepage_categories - ['Alle']
+  @form_error = params[:error]
+  @form_values = {
+    title: params[:title].to_s,
+    description: params[:description].to_s,
+    goal: params[:goal].to_s,
+    category: params[:category].to_s,
+    image_url: params[:image_url].to_s
+  }
+  erb :'campaigns/new'
 end
 
 get '/campaigns/:id' do
@@ -83,6 +98,29 @@ post '/campaigns/:id/donations' do
 end
 
 post '/campaigns' do
-  # TODO: Create new campaign
+  title = params[:title].to_s.strip
+  description = params[:description].to_s.strip
+  goal = params[:goal].to_s.strip.to_i
+  category = params[:category].to_s.strip
+  image_url = params[:image_url].to_s.strip
+
+  if title.empty? || description.empty? || goal <= 0 || category.empty?
+    redirect "/campaigns/new?error=Udfyld+alle+p%C3%A5kr%C3%A6vede+felter&title=#{URI.encode_www_form_component(title)}&description=#{URI.encode_www_form_component(description)}&goal=#{goal}&category=#{URI.encode_www_form_component(category)}&image_url=#{URI.encode_www_form_component(image_url)}"
+  end
+
+  if !image_url.empty? && image_url !~ %r{\Ahttps?://}i
+    redirect "/campaigns/new?error=Inds%C3%A6t+et+gyldigt+billedlink+der+starter+med+http+eller+https&title=#{URI.encode_www_form_component(title)}&description=#{URI.encode_www_form_component(description)}&goal=#{goal}&category=#{URI.encode_www_form_component(category)}&image_url=#{URI.encode_www_form_component(image_url)}"
+  end
+
+  DB[:campaigns].insert(
+    title: title,
+    description: description,
+    goal: goal,
+    deadline: Date.today + 30,
+    category: category,
+    image_url: image_url,
+    created_at: Time.now
+  )
+
   redirect '/campaigns'
 end

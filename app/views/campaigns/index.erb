@@ -12,7 +12,7 @@
       <a class="brand" href="/">Danmarks Donation</a>
       <ul class="nav-links">
         <li><a href="/campaigns">Kampagner</a></li>
-        <li><a href="#">Opret kampagne</a></li>
+        <li><a href="/campaigns/new">Opret kampagne</a></li>
         <li><a href="/profile">Log ind</a></li>
       </ul>
     </nav>
@@ -55,7 +55,10 @@
           <% collected = example_collected_amount(campaign.goal) %>
           <% progress = progress_percentage(collected, campaign.goal) %>
           <article class="campaign-card">
-            <div class="campaign-image"></div>
+            <div
+              class="campaign-image"
+              style="<%= campaign.image_url.to_s.strip.empty? ? '' : "background-image: url('" + campaign.image_url + "');" %>"
+            ></div>
             <div class="campaign-content">
               <p class="campaign-category"><%= campaign.category %></p>
               <h2><a href="/campaigns/<%= campaign_id %>" class="campaign-title-link"><%= campaign.title %></a></h2>
