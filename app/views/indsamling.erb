@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danmarks Donation - Opret Indsamling</title>
+    <link rel="stylesheet" href="/ui/indsamling.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-section">
+                <span class="logo-main">Danmarks Donation</span>
+                <span class="logo-sub">Vores platform – Sørger for gennemsigtighed</span>
+            </div>
+            <div class="nav-links">
+                <a href="#">Søg</a>
+                <a href="#">Projekter</a>
+                <a href="#" class="login-dropdown">Log ind <small>▼</small></a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1>Opret en ny indsamling</h1>
+
+        <div class="flex-container">
+            <section class="form-card">
+                <h2>Giv din kampagne en god start</h2>
+                <p class="subtitle">Udfyld nedenstående detaljer for at oprette en ny indsamlingskampagne. Alle indsamlinger gennemgås og godkendes af staten.</p>
+
+                <form action="/opret" method="POST" enctype="multipart/form-data">
+                    
+                    <div class="form-group">
+                        <label for="input-titel">Titel</label>
+                        <input type="text" name="titel" id="input-titel" placeholder="Skriv din titel her..." required>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Kategori</label>
+                            <select name="kategori">
+                                <option value="">Vælg kategori</option>
+                                <option value="miljoe">Miljø</option>
+                                <option value="socialt">Socialt arbejde</option>
+                                <option value="sundhed">Sundhed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="input-beloeb">Beløbsmål</label>
+                            <input type="number" name="beloeb" id="input-beloeb" placeholder="kr" required>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <label>Deadline</label>
+                            <input type="date" name="deadline">
+                        </div>
+                        <div class="form-group">
+                            </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-beskrivelse">Beskrivelse</label>
+                        <textarea name="beskrivelse" id="input-beskrivelse" rows="4" placeholder="Beskriv formålet..."></textarea>
+                    </div>
+
+                    <label>Upload billede</label>
+                    <div class="upload-zone" id="drop-zone">
+                        <input type="file" name="billede" id="file-input" accept="image/*" hidden>
+                        <p>Træk et billede hertil eller <strong>vælg fil</strong></p>
+                        <span>JPEG eller PNG, maks 5 MB</span>
+                    </div>
+
+                    <div class="info-box">
+                        <p>🛡️ Alle indsamlinger <strong>verificeres af staten</strong> for at sikre gennemsigtighed. Du vil modtage en e-mail, når din kampagne er godkendt eller afvist.</p>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Send til godkendelse</button>
+                    <p class="terms">Ved indsendelse bekræfter du at overholde vores <a href="#">retningslinjer</a>.</p>
+                </form>
+            </section>
+
+            <aside class="preview-section">
+                <h3>Forhåndsvisning af kampagne</h3>
+                <div class="preview-card">
+                    <div class="preview-media" id="preview-media-container">
+                        <img id="preview-img" src="https://via.placeholder.com/400x250?text=Kort+over+København" alt="Preview">
+                    </div>
+                    <div class="card-body">
+                        <h4 id="preview-titel">Din kampagne titel</h4>
+                        <p id="preview-beskrivelse" class="preview-desc">Beskrivelse af hvad jeg samler ind til...</p>
+                        
+                        <div class="progress-container">
+                            <p class="progress-stats">
+                                <strong>0 kr</strong> af <span id="preview-maale">0</span> kr
+                            </p>
+                            <div class="progress-bar"><div class="fill"></div></div>
+                        </div>
+
+                        <div class="card-footer">
+                            <span>❤️ 0 donationer</span>
+                            <button type="button" class="btn-doner" disabled>Donér</button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script src="/ui/indsamling.js"></script>
+</body>
+</html>

@@ -84,6 +84,7 @@ Valgfrie flags:
 
 ## Dokumentation
 
+Se `/docs` for arkitektur-beslutninger, skaleringsplan (v2) og vibecodingproces.
 Se `documentation.md` for samlet dokumentation.
 
 ## Seneste lille step (TDD light)
