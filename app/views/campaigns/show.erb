@@ -4,16 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= @campaign.title %> - DonationPlatform</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/site.css?v=20260324-10">
 </head>
 <body>
   <header class="site-header">
     <nav class="nav-container" aria-label="Hovedmenu">
       <a class="brand" href="/">Danmarks Donation</a>
       <ul class="nav-links">
-        <li><a href="/campaigns">Kampagner</a></li>
-        <li><a href="/campaigns/new">Opret kampagne</a></li>
-        <li><a href="/profile">Log ind</a></li>
+        <li><a href="/#campaign-list">Kampagner</a></li>
+        <li><a href="/campaigns/new">Opret indsamling</a></li>
+        <li>
+          <a href="<%= account_link_path %>" class="account-link">
+            <span class="lock-icon <%= account_lock_state %>" aria-hidden="true"><span class="lock-keyhole"></span></span>
+            <span><%= account_link_label %></span>
+          </a>
+        </li>
       </ul>
     </nav>
   </header>
@@ -60,7 +65,7 @@
 
           <label class="checkbox-row" for="anonymous">
             <input id="anonymous" name="anonymous" type="checkbox" value="1">
-            Doner anonymt
+            Donér anonymt
           </label>
 
           <label class="checkbox-row" for="tax_deduction">
@@ -91,7 +96,7 @@
         </form>
       </div>
 
-      <a href="/campaigns" class="card-link detail-back-link">Tilbage til kampagner</a>
+      <a href="/#campaign-list" class="card-link detail-back-link">Tilbage til kampagner</a>
     </section>
   </main>
 

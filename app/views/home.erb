@@ -4,16 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DonationPlatform - Samlet ind til formål der betyder noget</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/site.css?v=20260324-10">
 </head>
 <body>
   <header class="site-header">
     <nav class="nav-container" aria-label="Hovedmenu">
       <a class="brand" href="/">Danmarks Donation</a>
       <ul class="nav-links">
-        <li><a href="/campaigns">Kampagner</a></li>
-        <li><a href="/campaigns/new">Opret kampagne</a></li>
-        <li><a href="/profile">Log ind</a></li>
+        <li><a href="/#campaign-list">Kampagner</a></li>
+        <li><a href="/campaigns/new">Opret indsamling</a></li>
+        <li>
+          <a href="<%= account_link_path %>" class="account-link">
+            <span class="lock-icon <%= account_lock_state %>" aria-hidden="true"><span class="lock-keyhole"></span></span>
+            <span><%= account_link_label %></span>
+          </a>
+        </li>
       </ul>
     </nav>
   </header>
@@ -23,10 +28,10 @@
       <p class="hero-kicker">Tryg og gennemsigtig indsamling</p>
       <h1 id="hero-title">Støt de sager, der betyder noget</h1>
       <p class="hero-description">Find verificerede kampagner, følg fremgangen, og donér på under et minut.</p>
-      <a href="/campaigns" class="btn-primary">Se kampagner</a>
+      <a href="#campaign-list" class="btn-primary">Se kampagner</a>
     </section>
 
-    <section class="detail-card">
+    <section class="search-shell" aria-label="Søgefelt">
       <form action="/" method="get" class="campaign-search-form" role="search" aria-label="Søg kampagner på forsiden">
         <input type="hidden" name="category" value="<%= @selected_category || 'Alle' %>">
         <input
@@ -52,7 +57,7 @@
       <% end %>
     </section>
 
-    <section class="campaign-grid" aria-label="Fremhævede kampagner">
+    <section id="campaign-list" class="campaign-grid" aria-label="Fremhævede kampagner">
       <% campaigns = @featured_campaigns || [] %>
       <% if campaigns.empty? %>
         <p class="empty-state">Ingen kampagner i denne kategori endnu.</p>

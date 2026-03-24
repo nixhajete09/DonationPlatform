@@ -5,11 +5,10 @@ require 'sinatra/contrib'
 require 'sequel'
 require 'dotenv/load'
 require 'date'
-require 'uri'
-require 'pathname'
 require 'fileutils'
 require 'bcrypt'
 require 'sqlite3'
+require 'digest'
 
 Dir.chdir(File.dirname(__FILE__))
 
@@ -48,10 +47,23 @@ unless DB.table_exists?(:donations)
   end
 end
 
+if DB.table_exists?(:campaigns) && !DB[:campaigns].columns.include?(:user_id)
+  DB.alter_table :campaigns do
+    add_column :user_id, Integer
+  end
+end
+
+unless DB.table_exists?(:brugere)
+  DB.create_table :brugere do
+    primary_key :id
+    String :navn, null: false, unique: true
+    String :kode, null: false
+    DateTime :created_at, default: Sequel::CURRENT_TIMESTAMP
+  end
+end
+
 # Models directory
 require_relative 'app/models/campaign'
-require_relative 'app/models/donation'
-require_relative 'app/models/user'
 require_relative 'app/services/thank_you_mailer'
 
 # Routes
@@ -60,9 +72,48 @@ Dir.glob('app/routes/*.rb').sort.each { |file| require_relative file }
 configure do
   set :public_folder, 'public'
   set :views, 'app/views'
+  raw_session_secret = ENV.fetch('SESSION_SECRET', 'donation_platform_dev_session_secret')
+  set :session_secret, Digest::SHA256.hexdigest(raw_session_secret)
+  enable :sessions
 end
 
 helpers do
+  def current_user
+    return @_current_user if defined?(@_current_user)
+
+    user_id = session[:user_id].to_i
+    @_current_user = user_id.positive? ? DB[:brugere].where(id: user_id).first : nil
+  rescue Sequel::Error
+    @_current_user = nil
+  end
+
+  def logged_in?
+    !current_user.nil?
+  end
+
+  def account_link_path
+    logged_in? ? '/profile' : '/auth'
+  end
+
+  def account_display_name
+    return '' unless logged_in?
+
+    identifier = current_user[:navn].to_s.strip
+    return 'Bruger' if identifier.empty?
+
+    identifier.split('@').first
+  end
+
+  def account_lock_state
+    logged_in? ? 'open' : 'closed'
+  end
+
+  def account_link_label
+    return 'Log ind' unless logged_in?
+
+    account_display_name
+  end
+
   def homepage_categories
     %w[Alle Klima Dyr Sundhed Lokalt]
   end
@@ -85,19 +136,6 @@ helpers do
         value.to_s.downcase.include?(search_query)
       end
     end
-  end
-
-  def campaign_form_redirect_url(error:, title:, description:, goal:, category:, image_url:)
-    query = URI.encode_www_form(
-      error: error,
-      title: title,
-      description: description,
-      goal: goal,
-      category: category,
-      image_url: image_url
-    )
-
-    "/campaigns/new?#{query}"
   end
 
   def default_featured_campaigns
@@ -261,6 +299,7 @@ helpers do
                     deadline: row[:deadline],
                     category: row[:category] || 'Andet',
                     image_url: row[:image_url],
+                    user_id: row[:user_id],
                     created_at: row[:created_at]
                   )
                 end
@@ -309,6 +348,7 @@ helpers do
         deadline: row[:deadline],
         category: row[:category] || 'Andet',
         image_url: row[:image_url],
+        user_id: row[:user_id],
         created_at: row[:created_at]
       )
     end
@@ -317,36 +357,10 @@ helpers do
   rescue Sequel::Error
     featured_campaigns.find { |campaign| campaign.id.to_i == id }
   end
-
 end
 
 get '/ui' do
-  redirect '/indsamling'
-  default_ui_file = Dir.glob(File.join('.', 'ui', '*.html')).sort.first
-  halt 404, 'Ingen HTML-fil fundet i ui-mappen' unless default_ui_file
-
-  redirect "/ui/#{File.basename(default_ui_file)}"
-end
-
-get '/ui/*' do |requested_path|
-  cleaned_path = Pathname.new(requested_path).cleanpath.to_s
-  halt 403 if cleaned_path.start_with?('/') || cleaned_path.start_with?('..')
-
-  relative_ui_file = File.join('.', 'ui', cleaned_path)
-  halt 404 unless File.file?(relative_ui_file)
-
-  case File.extname(relative_ui_file)
-  when '.html'
-    content_type :html
-  when '.css'
-    content_type :css
-  when '.js'
-    content_type 'application/javascript'
-  else
-    content_type 'application/octet-stream'
-  end
-
-  File.binread(relative_ui_file)
+  redirect '/'
 end
 
 # Home page
@@ -360,53 +374,5 @@ get '/' do
     selected_category: @selected_category,
     query: @query
   )
-  erb :index
-end
-
-get '/indsamling' do
-  erb :indsamling
-end
-
-post '/opret' do
-  puts params.inspect
-  "Kampagnen '#{params[:titel]}' er modtaget!"
-end
-
-
-#opret/login page 
-get '/auth' do
-  erb :opret
-end
-
-get '/opret' do
-  erb :opret
-end
-
-post '/login' do
-  bruger = DB[:brugere].where(navn: params[:brugernavn]).first
-  
-  if bruger && BCrypt::Password.new(bruger[:kode]) == params[:kode]
-    session[:user_id] = bruger[:id]
-    redirect '/'
-  else
-    @login_error = "Forkert brugernavn eller kode."
-    erb :auth
-  end
-end
-
-post '/signup' do
-  hashed_kode = BCrypt::Password.create(params[:kode])
-  begin
-    # Sequel syntax til at indsætte data
-    new_id = DB[:brugere].insert(navn: params[:brugernavn], kode: hashed_kode)
-    
-    session[:user_id] = new_id
-    redirect '/'
-  rescue Sequel::UniqueConstraintViolation
-    @signup_error = "Dette navn er allerede optaget."
-    erb :auth
-  rescue => e
-    @signup_error = "Der skete en fejl: #{e.message}"
-    erb :auth
-  end
+  erb :home
 end

@@ -1,30 +1,8 @@
 # frozen_string_literal: true
 
 # Campaigns routes
-get '/campaigns' do
-  @query = params[:q].to_s.strip
-  @selected_category = normalized_selected_category(params[:category])
-  @categories = homepage_categories
-
-  @campaigns = filter_campaigns(
-    featured_campaigns,
-    selected_category: @selected_category,
-    query: @query
-  )
-  erb :'campaigns/index'
-end
-
 get '/campaigns/new' do
-  @categories = homepage_categories - ['Alle']
-  @form_error = params[:error]
-  @form_values = {
-    title: params[:title].to_s,
-    description: params[:description].to_s,
-    goal: params[:goal].to_s,
-    category: params[:category].to_s,
-    image_url: params[:image_url].to_s
-  }
-  erb :'campaigns/new'
+  erb :'campaigns/create'
 end
 
 get '/campaigns/:id' do
@@ -37,7 +15,6 @@ get '/campaigns/:id' do
   @donation_amount = params[:amount]
   @donation_error = params[:error]
   @donation_email_status = params[:email_status]
-  @donation_tier = params[:tier]
   @tax_deduction_selected = params[:tax] == '1'
   erb :'campaigns/show'
 end
@@ -71,7 +48,6 @@ post '/campaigns/:id/donations' do
   )
 
   email_status = 'none'
-  tier = ThankYouMailer.new.tier_for(amount_value).to_s
 
   unless donor_email.empty?
     redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+en+gyldig+email+eller+lad+feltet+v%C3%A6re+tomt" unless donor_email.match?(/\A[^\s@]+@[^\s@]+\.[^\s@]+\z/)
@@ -87,51 +63,35 @@ post '/campaigns/:id/donations' do
     )
 
     email_status = email_result[:sent] ? email_result[:mode] : 'failed'
-    tier = email_result[:tier].to_s
   end
 
   tax_flag = wants_tax_deduction ? '&tax=1' : ''
-  redirect "/campaigns/#{campaign.id}?status=success&amount=#{amount_value.to_i}&email_status=#{email_status}&tier=#{tier}#{tax_flag}"
+  redirect "/campaigns/#{campaign.id}?status=success&amount=#{amount_value.to_i}&email_status=#{email_status}#{tax_flag}"
 end
 
 post '/campaigns' do
-  title = params[:title].to_s.strip
-  description = params[:description].to_s.strip
-  goal = params[:goal].to_s.strip.to_i
-  category = params[:category].to_s.strip
-  image_url = params[:image_url].to_s.strip
+  owner_id = session[:user_id].to_i
 
-  if title.empty? || description.empty? || goal <= 0 || category.empty?
-    redirect campaign_form_redirect_url(
-      error: 'Udfyld alle påkrævede felter',
-      title: title,
-      description: description,
-      goal: goal,
-      category: category,
-      image_url: image_url
-    )
-  end
+  title = (params[:title] || params[:titel]).to_s.strip
+  description = (params[:description] || params[:beskrivelse]).to_s.strip
+  goal = (params[:goal] || params[:beloeb]).to_s.strip.to_i
+  raw_category = (params[:category] || params[:kategori]).to_s.strip
+  category = raw_category.empty? ? 'Lokalt' : raw_category.capitalize
 
-  if !image_url.empty? && image_url !~ %r{\Ahttps?://}i
-    redirect campaign_form_redirect_url(
-      error: 'Indsæt et gyldigt billedlink der starter med http eller https',
-      title: title,
-      description: description,
-      goal: goal,
-      category: category,
-      image_url: image_url
-    )
-  end
+  redirect '/campaigns/new' if title.empty? || description.empty? || goal <= 0
+
+  deadline = params[:deadline].to_s.strip
 
   DB[:campaigns].insert(
     title: title,
     description: description,
     goal: goal,
-    deadline: Date.today + 30,
+    deadline: deadline.empty? ? Date.today + 30 : Date.parse(deadline),
     category: category,
-    image_url: image_url,
+    user_id: owner_id.positive? ? owner_id : nil,
+    image_url: nil,
     created_at: Time.now
   )
 
-  redirect '/campaigns'
+  redirect(owner_id.positive? ? '/profile' : '/')
 end
