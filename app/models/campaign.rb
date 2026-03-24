@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Campaign
   # Campaign model for donation campaigns
   attr_accessor :id, :title, :description, :goal, :deadline, :category, :image_url, :created_at

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sinatra'
 require 'sinatra/contrib'
 require 'sequel'
@@ -41,7 +43,7 @@ require_relative 'app/models/user'
 require_relative 'app/services/thank_you_mailer'
 
 # Routes
-Dir.glob('app/routes/*.rb').each { |file| require_relative file }
+Dir.glob('app/routes/*.rb').sort.each { |file| require_relative file }
 
 configure do
   set :public_folder, 'public'
@@ -244,7 +246,7 @@ helpers do
   def progress_percentage(collected, goal)
     return 0 if goal.to_i <= 0
 
-    percentage = (collected.to_f / goal.to_f) * 100
+    percentage = (collected.to_f / goal) * 100
     [[percentage.round, 0].max, 100].min
   end
 
@@ -278,9 +280,19 @@ end
 get '/' do
   @selected_category = params[:category].to_s.strip
   @selected_category = 'Alle' if @selected_category.empty?
+  @query = params[:q].to_s.strip
 
   campaigns = featured_campaigns
   campaigns = campaigns.select { |campaign| campaign.category == @selected_category } if @selected_category != 'Alle'
+
+  unless @query.empty?
+    search = @query.downcase
+    campaigns = campaigns.select do |campaign|
+      [campaign.title, campaign.description, campaign.category].any? do |value|
+        value.to_s.downcase.include?(search)
+      end
+    end
+  end
 
   @categories = homepage_categories
   @featured_campaigns = campaigns

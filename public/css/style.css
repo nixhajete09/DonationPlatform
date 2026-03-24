@@ -384,6 +384,61 @@ body {
   margin-top: 0.6rem;
 }
 
+.site-footer {
+  margin-top: 2rem;
+  border-top: 1px solid #dbe4ef;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef4fb 100%);
+}
+
+.footer-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.4rem 1.25rem 1.1rem;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.footer-column h2 {
+  font-size: 0.95rem;
+  color: #0f172a;
+  margin-bottom: 0.35rem;
+}
+
+.footer-column p {
+  font-size: 0.87rem;
+  color: #475569;
+  margin-bottom: 0.3rem;
+}
+
+.footer-column a {
+  color: #1e3a8a;
+  text-decoration: none;
+}
+
+.footer-column a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  margin-top: 0.9rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid #dbe4ef;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
 @media (max-width: 640px) {
   .page-content {
     padding: 1.2rem 0.9rem 2rem;
@@ -437,6 +492,10 @@ body {
     justify-content: center;
     width: 100%;
   }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 768px) {
@@ -457,6 +516,10 @@ body {
 
   .campaign-grid {
     grid-template-columns: 1fr;
+  }
+
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

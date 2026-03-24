@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Profile routes
 get '/login' do
   redirect '/profile'
