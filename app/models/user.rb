@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class User
   # User model for donors and campaign creators
   attr_accessor :id, :email, :name, :password_hash, :created_at
 
-  def initialize(id: nil, email:, name:, password_hash:, created_at: nil)
+  def initialize(email:, name:, password_hash:, id: nil, created_at: nil)
     @id = id
     @email = email
     @name = name
