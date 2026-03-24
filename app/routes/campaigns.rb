@@ -43,11 +43,11 @@ post '/campaigns/:id/donations' do
   cpr_digits = params[:cpr].to_s.gsub(/\D/, '')
 
   if amount.empty? || amount_value <= 0
-    redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+et+gyldigt+beloeb"
+    redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+et+gyldigt+bel%C3%B8b"
   end
 
   if wants_tax_deduction && cpr_digits.length != 10
-    redirect "/campaigns/#{campaign.id}?status=error&error=CPR+skal+vaere+10+cifre+for+skattefradrag&tax=1"
+    redirect "/campaigns/#{campaign.id}?status=error&error=CPR+skal+v%C3%A6re+10+cifre+for+skattefradrag&tax=1"
   end
 
   email_status = 'none'
@@ -55,7 +55,7 @@ post '/campaigns/:id/donations' do
 
   unless donor_email.empty?
     unless donor_email.match?(/\A[^\s@]+@[^\s@]+\.[^\s@]+\z/)
-      redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+en+gyldig+email+eller+lad+feltet+vaere+tomt"
+      redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+en+gyldig+email+eller+lad+feltet+v%C3%A6re+tomt"
     end
 
     collected_after = example_collected_amount(campaign.goal) + amount_value

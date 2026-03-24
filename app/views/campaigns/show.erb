@@ -21,19 +21,16 @@
   <main class="page-content">
     <section class="detail-card">
       <% if @donation_status == 'success' %>
-        <p class="alert alert-success">Tak for din donation pa <%= @donation_amount %> kr.</p>
-        <% if @donation_tier %>
-          <p class="alert alert-info">Takkeniveau: <strong><%= @donation_tier %></strong></p>
-        <% end %>
+        <p class="alert alert-success">Tak for din donation på <%= @donation_amount %> kr.</p>
         <% if @donation_email_status == 'smtp' %>
-          <p class="alert alert-success">Kvittering og takkemail er sendt til din email.</p>
+          <p class="alert alert-success">Kvittering er sendt til din email.</p>
         <% elsif @donation_email_status == 'simulated' %>
           <p class="alert alert-info">Email er simuleret lokalt (se tmp/sent_emails.log).</p>
         <% elsif @donation_email_status == 'failed' %>
           <p class="alert alert-error">Email kunne ikke sendes. Donation er stadig registreret.</p>
         <% end %>
       <% elsif @donation_status == 'error' %>
-        <p class="alert alert-error"><%= @donation_error || 'Noget gik galt. Proev igen.' %></p>
+        <p class="alert alert-error"><%= @donation_error || 'Noget gik galt. Prøv igen.' %></p>
       <% end %>
 
       <p class="campaign-category"><%= @campaign.category %></p>
@@ -46,12 +43,12 @@
 
       <div class="detail-stats">
         <p><strong>Indsamlet:</strong> <%= @collected %> kr</p>
-        <p><strong>Maal:</strong> <%= @campaign.goal %> kr</p>
+        <p><strong>Mål:</strong> <%= @campaign.goal %> kr</p>
       </div>
 
       <div class="detail-actions">
         <form action="/campaigns/<%= @campaign.id %>/donations" method="post" class="donation-form">
-          <label for="amount">Beloeb (kr)</label>
+          <label for="amount">Beløb (kr)</label>
           <input id="amount" name="amount" type="number" min="1" step="1" required>
 
           <label for="donor_name">Navn</label>
@@ -90,7 +87,7 @@
             >
           </div>
 
-          <button type="submit" class="btn-primary">Bekraeft donation</button>
+          <button type="submit" class="btn-primary">Bekræft donation</button>
         </form>
       </div>
 

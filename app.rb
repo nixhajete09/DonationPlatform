@@ -30,24 +30,24 @@ helpers do
     [
       Campaign.new(
         id: 1,
-        title: 'Stot kraeftramte',
-        description: 'Hjaelp familier med behandling og praktisk stotte i hverdagen.',
+        title: 'Støt kræftramte',
+        description: 'Hjælp familier med behandling og praktisk støtte i hverdagen.',
         goal: 10_000,
         deadline: Date.today + 30,
         category: 'Sundhed'
       ),
       Campaign.new(
         id: 2,
-        title: 'Plant traeer',
-        description: 'Sammen planter vi nye traeer i udsatte omrader i Danmark.',
+        title: 'Plant træer',
+        description: 'Sammen planter vi nye træer i udsatte områder i Danmark.',
         goal: 10_000,
         deadline: Date.today + 45,
         category: 'Klima'
       ),
       Campaign.new(
         id: 3,
-        title: 'Dyrevaern i kulden',
-        description: 'Stot midlertidige ophold og foder til hjemlose kaeledyr.',
+        title: 'Dyreværn i kulden',
+        description: 'Støt midlertidige ophold og foder til hjemløse kæledyr.',
         goal: 15_000,
         deadline: Date.today + 20,
         category: 'Dyr'

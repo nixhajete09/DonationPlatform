@@ -50,11 +50,11 @@ class ThankYouMailer
 
     tier_message = case tier
                    when :basic
-                     'Tusind tak for din stotte. Din donation gor en forskel.'
+                     'Tusind tak for din støtte. Din donation gør en forskel.'
                    when :personal
-                     'Tusind tak for din store stotte. Her er en personlig tak og en kort kampagneopdatering.'
+                     'Tusind tak for din store støtte. Her er en personlig tak og en kort kampagneopdatering.'
                    else
-                     'Tusind tak for dit meget store bidrag. Vi folger op med en dedikeret besked.'
+                     'Tusind tak for dit meget store bidrag. Vi følger op med en dedikeret besked.'
                    end
 
     <<~BODY

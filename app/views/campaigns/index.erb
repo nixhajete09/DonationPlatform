@@ -23,21 +23,21 @@
       <h1>Kampagner</h1>
       <p class="detail-description">Vælg en kampagne for at se flere detaljer.</p>
 
-      <form action="/campaigns" method="get" class="campaign-search-form" role="search" aria-label="Sog kampagner">
+      <form action="/campaigns" method="get" class="campaign-search-form" role="search" aria-label="Søg kampagner">
         <input
           type="search"
           name="q"
           value="<%= @query %>"
-          placeholder="Sog efter kampagne, kategori eller formaal"
+          placeholder="Søg efter kampagne, kategori eller formål"
           class="campaign-search-input"
         >
-        <button type="submit" class="campaign-search-button">Sog</button>
+        <button type="submit" class="campaign-search-button">Søg</button>
       </form>
     </section>
 
     <section class="campaign-grid" aria-label="Kampagneliste">
       <% if @campaigns.empty? %>
-        <p class="empty-state">Ingen kampagner matcher din sogning.</p>
+        <p class="empty-state">Ingen kampagner matcher din søgning.</p>
       <% else %>
         <% @campaigns.each_with_index do |campaign, index| %>
           <% campaign_id = campaign.id || (index + 1) %>

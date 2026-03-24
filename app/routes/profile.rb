@@ -10,9 +10,9 @@ get '/profile' do
   @tax_deduction_total = 1100
 
   @donation_history = [
-    { campaign: 'Stot kraeftramte', amount: 250, date: '2026-03-20', tax_deduction: true },
-    { campaign: 'Plant traeer', amount: 400, date: '2026-03-18', tax_deduction: true },
-    { campaign: 'Dyrevaern i kulden', amount: 800, date: '2026-03-12', tax_deduction: false }
+    { campaign: 'Støt kræftramte', amount: 250, date: '2026-03-20', tax_deduction: true },
+    { campaign: 'Plant træer', amount: 400, date: '2026-03-18', tax_deduction: true },
+    { campaign: 'Dyreværn i kulden', amount: 800, date: '2026-03-12', tax_deduction: false }
   ]
 
   erb :profile
