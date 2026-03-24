@@ -3,6 +3,8 @@ require 'sinatra/contrib'
 require 'sequel'
 require 'dotenv/load'
 require 'pathname'
+require 'bcrypt'
+require 'sqlite3'
 
 Dir.chdir(File.dirname(__FILE__))
 
@@ -24,6 +26,10 @@ end
 
 get '/ui' do
   redirect '/indsamling'
+  default_ui_file = Dir.glob(File.join('.', 'ui', '*.html')).sort.first
+  halt 404, 'Ingen HTML-fil fundet i ui-mappen' unless default_ui_file
+
+  redirect "/ui/#{File.basename(default_ui_file)}"
 end
 
 get '/ui/*' do |requested_path|
@@ -62,3 +68,40 @@ post '/opret' do
 end
 
 
+#opret/login page 
+get '/auth' do
+  erb :opret
+end
+
+get '/opret' do
+  erb :opret
+end
+
+post '/login' do
+  bruger = DB[:brugere].where(navn: params[:brugernavn]).first
+  
+  if bruger && BCrypt::Password.new(bruger[:kode]) == params[:kode]
+    session[:user_id] = bruger[:id]
+    redirect '/'
+  else
+    @login_error = "Forkert brugernavn eller kode."
+    erb :auth
+  end
+end
+
+post '/signup' do
+  hashed_kode = BCrypt::Password.create(params[:kode])
+  begin
+    # Sequel syntax til at indsætte data
+    new_id = DB[:brugere].insert(navn: params[:brugernavn], kode: hashed_kode)
+    
+    session[:user_id] = new_id
+    redirect '/'
+  rescue Sequel::UniqueConstraintViolation
+    @signup_error = "Dette navn er allerede optaget."
+    erb :auth
+  rescue => e
+    @signup_error = "Der skete en fejl: #{e.message}"
+    erb :auth
+  end
+end
