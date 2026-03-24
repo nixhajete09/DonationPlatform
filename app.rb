@@ -7,13 +7,19 @@ require 'dotenv/load'
 require 'date'
 require 'uri'
 require 'pathname'
+require 'fileutils'
 require 'bcrypt'
 require 'sqlite3'
 
 Dir.chdir(File.dirname(__FILE__))
 
 # Database setup
-DB = Sequel.connect('sqlite://db/donation_platform.db')
+database_url = ENV.fetch('DATABASE_URL') do
+  ENV['RACK_ENV'] == 'test' ? 'sqlite::memory:' : 'sqlite://db/donation_platform.db'
+end
+
+FileUtils.mkdir_p('db') if database_url == 'sqlite://db/donation_platform.db'
+DB = Sequel.connect(database_url)
 
 unless DB.table_exists?(:campaigns)
   DB.create_table :campaigns do
