@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Opret eller Log ind - Danmarks Donation</title>
-    <link rel="stylesheet" href="/ui/opret.css">
+    <link rel="stylesheet" href="/css/auth.css">
 </head>
 <body class="auth-page">
 
@@ -13,26 +13,26 @@
                 <span class="logo-main">Danmarks Donation</span>
             </div>
             <div class="nav-links">
-                <a href="#">Søg</a>
-                <a href="#">Projekter</a>
+                <a href="/campaigns">Sog</a>
+                <a href="/campaigns">Projekter</a>
             </div>
         </div>
     </nav>
 
     <main class="auth-wrapper">
         <div class="auth-grid">
-            
+
             <section class="auth-col">
                 <h2>Opret konto</h2>
-                <p>Er du ny her? Opret en profil på få sekunder for at starte din egen indsamling eller støtte andre.</p>
+                <p>Er du ny her? Opret en profil pa fa sekunder for at starte din egen indsamling eller stotte andre.</p>
 
                 <form action="/signup" method="POST">
                     <div class="input-group">
-                        <label>Vælg brugernavn</label>
+                        <label>Vaelg brugernavn</label>
                         <input type="text" name="brugernavn" placeholder="Navn / Mailadresse" required>
                     </div>
                     <div class="input-group">
-                        <label>Vælg adgangskode</label>
+                        <label>Vaelg adgangskode</label>
                         <input type="password" name="kode" placeholder="Mindst 6 tegn" required>
                     </div>
                     <button type="submit" class="btn-auth btn-secondary">Opret bruger</button>

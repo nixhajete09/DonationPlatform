@@ -15,15 +15,10 @@ get '/campaigns' do
 end
 
 get '/campaigns/new' do
-  @categories = homepage_categories - ['Alle']
-  @form_error = params[:error]
-  @form_values = {
-    title: params[:title].to_s,
-    description: params[:description].to_s,
-    goal: params[:goal].to_s,
-    category: params[:category].to_s,
-    image_url: params[:image_url].to_s
-  }
+  erb :'campaigns/new'
+end
+
+get '/indsamling' do
   erb :'campaigns/new'
 end
 
@@ -95,41 +90,47 @@ post '/campaigns/:id/donations' do
 end
 
 post '/campaigns' do
-  title = params[:title].to_s.strip
-  description = params[:description].to_s.strip
-  goal = params[:goal].to_s.strip.to_i
-  category = params[:category].to_s.strip
-  image_url = params[:image_url].to_s.strip
+  title = (params[:title] || params[:titel]).to_s.strip
+  description = (params[:description] || params[:beskrivelse]).to_s.strip
+  goal = (params[:goal] || params[:beloeb]).to_s.strip.to_i
+  raw_category = (params[:category] || params[:kategori]).to_s.strip
+  category = raw_category.empty? ? 'Lokalt' : raw_category.capitalize
 
-  if title.empty? || description.empty? || goal <= 0 || category.empty?
-    redirect campaign_form_redirect_url(
-      error: 'Udfyld alle påkrævede felter',
-      title: title,
-      description: description,
-      goal: goal,
-      category: category,
-      image_url: image_url
-    )
-  end
+  redirect '/campaigns/new' if title.empty? || description.empty? || goal <= 0
 
-  if !image_url.empty? && image_url !~ %r{\Ahttps?://}i
-    redirect campaign_form_redirect_url(
-      error: 'Indsæt et gyldigt billedlink der starter med http eller https',
-      title: title,
-      description: description,
-      goal: goal,
-      category: category,
-      image_url: image_url
-    )
-  end
+  deadline = params[:deadline].to_s.strip
 
   DB[:campaigns].insert(
     title: title,
     description: description,
     goal: goal,
-    deadline: Date.today + 30,
+    deadline: deadline.empty? ? Date.today + 30 : Date.parse(deadline),
     category: category,
-    image_url: image_url,
+    image_url: nil,
+    created_at: Time.now
+  )
+
+  redirect '/campaigns'
+end
+
+post '/opret' do
+  title = (params[:title] || params[:titel]).to_s.strip
+  description = (params[:description] || params[:beskrivelse]).to_s.strip
+  goal = (params[:goal] || params[:beloeb]).to_s.strip.to_i
+  raw_category = (params[:category] || params[:kategori]).to_s.strip
+  category = raw_category.empty? ? 'Lokalt' : raw_category.capitalize
+
+  redirect '/campaigns/new' if title.empty? || description.empty? || goal <= 0
+
+  deadline = params[:deadline].to_s.strip
+
+  DB[:campaigns].insert(
+    title: title,
+    description: description,
+    goal: goal,
+    deadline: deadline.empty? ? Date.today + 30 : Date.parse(deadline),
+    category: category,
+    image_url: nil,
     created_at: Time.now
   )
 
