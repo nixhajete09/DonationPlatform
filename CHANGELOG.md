@@ -5,7 +5,7 @@ Alle vigtige aendringer i projektet dokumenteres her.
 ## [Unreleased]
 
 ### Added
-- Ny route: `GET /indsamling` render `erb :indsamling`.
+- Ny route: `GET /indsamling` renderer `erb :indsamling`.
 - Isoleret route-test i `spec/indsamling_route_spec.rb`.
 - Simpel model-validering: `Donation#valid_amount?` accepterer kun beloeb stoerre end 0.
 - Isoleret RSpec-test i `spec/donation_spec.rb` for ugyldige beloeb (nil og 0).
@@ -15,6 +15,7 @@ Alle vigtige aendringer i projektet dokumenteres her.
 
 ### Changed
 - Auth-siden renderes nu som Sinatra view (`erb :opret`) via `/auth` og `/opret`.
+- `/ui` redirect peger nu pa `/indsamling`.
 - Down-scriptet sletter nu VM helt og fortsatter kun cleanup, hvis public IP stadig er den samme.
 - Down-scriptet kan nu auto-detektere korrekt resource group for VM og venter pa bekraeftet VM-sletning i Azure.
 - Up-scriptet opretter nu automatisk SSH-nogler, hvis angivet public key-fil ikke findes.
