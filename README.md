@@ -53,3 +53,8 @@ Besøg: `http://localhost:4567`
 ## Dokumentation
 
 Se `/docs` for arkitektur-beslutninger, skaleringsplan (v2) og vibecodingproces.
+
+## Seneste lille step
+
+- Tilfoejet `GET /indsamling` som renderer `app/views/indsamling.erb`.
+- Tilfoejet isoleret test i `spec/indsamling_route_spec.rb`.

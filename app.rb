@@ -23,7 +23,7 @@ configure do
 end
 
 get '/ui' do
-  redirect '/ui/indsamling.html'
+  redirect '/indsamling'
 end
 
 get '/ui/*' do |requested_path|
@@ -52,14 +52,13 @@ get '/' do
   erb :index
 end
 
-# opret en kampagne 
-get '/' do
-  erb :index
+get '/indsamling' do
+  erb :indsamling
 end
 
 post '/opret' do
-  # Her kan du se data i din terminal
   puts params.inspect
   "Kampagnen '#{params[:titel]}' er modtaget!"
 end
+
 
