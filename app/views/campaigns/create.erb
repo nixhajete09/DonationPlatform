@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opret indsamling - DonationPlatform</title>
-    <link rel="stylesheet" href="/css/site.css?v=20260324-3">
+    <link rel="stylesheet" href="/css/site.css?v=20260324-10">
 </head>
 <body>
     <header class="site-header">
         <nav class="nav-container" aria-label="Hovedmenu">
             <a class="brand" href="/">Danmarks Donation</a>
             <ul class="nav-links">
-                <li><a href="/campaigns">Kampagner</a></li>
+                <li><a href="/#campaign-list">Kampagner</a></li>
                 <li><a href="/campaigns/new">Opret indsamling</a></li>
-                <li><a href="/auth">Log ind</a></li>
+                <li>
+                    <a href="<%= account_link_path %>" class="account-link">
+                        <span class="lock-icon <%= account_lock_state %>" aria-hidden="true"><span class="lock-keyhole"></span></span>
+                        <span><%= account_link_label %></span>
+                    </a>
+                </li>
             </ul>
         </nav>
     </header>

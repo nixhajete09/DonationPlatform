@@ -8,6 +8,7 @@ require 'date'
 require 'fileutils'
 require 'bcrypt'
 require 'sqlite3'
+require 'digest'
 
 Dir.chdir(File.dirname(__FILE__))
 
@@ -46,10 +47,23 @@ unless DB.table_exists?(:donations)
   end
 end
 
+if DB.table_exists?(:campaigns) && !DB[:campaigns].columns.include?(:user_id)
+  DB.alter_table :campaigns do
+    add_column :user_id, Integer
+  end
+end
+
+unless DB.table_exists?(:brugere)
+  DB.create_table :brugere do
+    primary_key :id
+    String :navn, null: false, unique: true
+    String :kode, null: false
+    DateTime :created_at, default: Sequel::CURRENT_TIMESTAMP
+  end
+end
+
 # Models directory
 require_relative 'app/models/campaign'
-require_relative 'app/models/donation'
-require_relative 'app/models/user'
 require_relative 'app/services/thank_you_mailer'
 
 # Routes
@@ -58,9 +72,48 @@ Dir.glob('app/routes/*.rb').sort.each { |file| require_relative file }
 configure do
   set :public_folder, 'public'
   set :views, 'app/views'
+  raw_session_secret = ENV.fetch('SESSION_SECRET', 'donation_platform_dev_session_secret')
+  set :session_secret, Digest::SHA256.hexdigest(raw_session_secret)
+  enable :sessions
 end
 
 helpers do
+  def current_user
+    return @_current_user if defined?(@_current_user)
+
+    user_id = session[:user_id].to_i
+    @_current_user = user_id.positive? ? DB[:brugere].where(id: user_id).first : nil
+  rescue Sequel::Error
+    @_current_user = nil
+  end
+
+  def logged_in?
+    !current_user.nil?
+  end
+
+  def account_link_path
+    logged_in? ? '/profile' : '/auth'
+  end
+
+  def account_display_name
+    return '' unless logged_in?
+
+    identifier = current_user[:navn].to_s.strip
+    return 'Bruger' if identifier.empty?
+
+    identifier.split('@').first
+  end
+
+  def account_lock_state
+    logged_in? ? 'open' : 'closed'
+  end
+
+  def account_link_label
+    return 'Log ind' unless logged_in?
+
+    account_display_name
+  end
+
   def homepage_categories
     %w[Alle Klima Dyr Sundhed Lokalt]
   end
@@ -246,6 +299,7 @@ helpers do
                     deadline: row[:deadline],
                     category: row[:category] || 'Andet',
                     image_url: row[:image_url],
+                    user_id: row[:user_id],
                     created_at: row[:created_at]
                   )
                 end
@@ -294,6 +348,7 @@ helpers do
         deadline: row[:deadline],
         category: row[:category] || 'Andet',
         image_url: row[:image_url],
+        user_id: row[:user_id],
         created_at: row[:created_at]
       )
     end

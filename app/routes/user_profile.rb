@@ -1,21 +1,20 @@
 # frozen_string_literal: true
 
-# Profile routes
-get '/login' do
-  redirect '/profile'
-end
-
 get '/profile' do
-  @profile_name = 'Nixhajete Bruger'
-  @profile_email = 'bruger@example.com'
-  @total_donated = 1450
-  @tax_deduction_total = 1100
+  user_id = session[:user_id].to_i
+  redirect '/auth' if user_id <= 0
 
-  @donation_history = [
-    { campaign: 'Støt kræftramte', amount: 250, date: '2026-03-20', tax_deduction: true },
-    { campaign: 'Plant træer', amount: 400, date: '2026-03-18', tax_deduction: true },
-    { campaign: 'Dyreværn i kulden', amount: 800, date: '2026-03-12', tax_deduction: false }
-  ]
+  user = DB[:brugere].where(id: user_id).first
+  redirect '/auth' unless user
+
+  @profile_handle = user[:navn].to_s.split('@').first
+  @total_donated = 0
+  @tax_deduction_total = 0
+
+  @owned_campaigns = DB[:campaigns]
+                     .where(user_id: user_id)
+                     .reverse_order(:created_at)
+                     .all
 
   erb :user_profile
 end

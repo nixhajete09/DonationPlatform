@@ -5,16 +5,12 @@ get '/auth' do
   erb :authentication
 end
 
-get '/opret' do
-  redirect '/auth'
-end
-
 post '/login' do
   bruger = DB[:brugere].where(navn: params[:brugernavn]).first
 
   if bruger && BCrypt::Password.new(bruger[:kode]) == params[:kode]
     session[:user_id] = bruger[:id]
-    redirect '/'
+    redirect '/profile'
   else
     @login_error = 'Forkert brugernavn eller kode.'
     erb :authentication
@@ -28,7 +24,7 @@ post '/signup' do
     new_id = DB[:brugere].insert(navn: params[:brugernavn], kode: hashed_kode)
 
     session[:user_id] = new_id
-    redirect '/'
+    redirect '/profile'
   rescue Sequel::UniqueConstraintViolation
     @signup_error = 'Dette navn er allerede optaget.'
     erb :authentication
@@ -36,4 +32,9 @@ post '/signup' do
     @signup_error = "Der skete en fejl: #{e.message}"
     erb :authentication
   end
+end
+
+post '/logout' do
+  session.clear
+  redirect '/'
 end

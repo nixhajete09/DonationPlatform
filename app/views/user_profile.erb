@@ -4,27 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Min profil - DonationPlatform</title>
-  <link rel="stylesheet" href="/css/site.css?v=20260324-3">
+  <link rel="stylesheet" href="/css/site.css?v=20260324-11">
 </head>
 <body>
   <header class="site-header">
     <nav class="nav-container" aria-label="Hovedmenu">
       <a class="brand" href="/">Danmarks Donation</a>
       <ul class="nav-links">
-        <li><a href="/campaigns">Kampagner</a></li>
+        <li><a href="/#campaign-list">Kampagner</a></li>
         <li><a href="/campaigns/new">Opret indsamling</a></li>
-        <li><a href="/profile">Min profil</a></li>
+        <li>
+          <a href="<%= account_link_path %>" class="account-link">
+            <span class="lock-icon <%= account_lock_state %>" aria-hidden="true"><span class="lock-keyhole"></span></span>
+            <span><%= account_link_label %></span>
+          </a>
+        </li>
       </ul>
     </nav>
   </header>
 
   <main class="page-content">
-    <section class="detail-card">
-      <h1>Min profil</h1>
-      <p class="detail-description"><strong><%= @profile_name %></strong> - <%= @profile_email %></p>
+    <section class="detail-card profile-header-card">
+      <div class="profile-header-row">
+        <div class="profile-header-badge" aria-label="Brugerprofil">
+          <span class="profile-header-icon" aria-hidden="true"><span class="lock-icon open"><span class="lock-keyhole"></span></span></span>
+          <div>
+            <p class="profile-header-label">Konto</p>
+            <h1><%= @profile_handle %></h1>
+          </div>
+        </div>
+
+        <form action="/logout" method="post" class="logout-form">
+          <button type="submit" class="btn-secondary logout-button">Log ud</button>
+        </form>
+      </div>
     </section>
 
-    <section class="campaign-grid" aria-label="Profiloversigt">
+    <section class="campaign-grid profile-overview-grid" aria-label="Profiloversigt">
       <article class="campaign-card">
         <div class="campaign-content">
           <p class="campaign-category">Donationer</p>
@@ -45,29 +61,35 @@
         <div class="campaign-content">
           <p class="campaign-category">Handlinger</p>
           <h2>Hurtige links</h2>
-          <p><a href="/campaigns" class="card-link">Find nye kampagner</a></p>
+          <p><a href="/#campaign-list" class="card-link">Find nye kampagner</a></p>
           <p><a href="#" class="card-link">Se skattekvitteringer</a></p>
         </div>
       </article>
     </section>
 
     <section class="detail-card">
-      <h2>Mine seneste donationer</h2>
-      <p class="detail-description">Overblik over dine bidrag.</p>
+      <h2>Mine indsamlinger</h2>
+      <p class="detail-description">Dine oprettede indsamlinger vises her.</p>
 
-      <% if @donation_history.empty? %>
-        <p class="empty-state">Du har endnu ikke doneret.</p>
+      <% if @owned_campaigns.nil? || @owned_campaigns.empty? %>
+        <p class="empty-state">Du har ikke oprettet en indsamling endnu.</p>
       <% else %>
-        <% @donation_history.each do |donation| %>
+        <% @owned_campaigns.each do |campaign| %>
           <article class="campaign-card" style="margin-bottom: 0.8rem;">
             <div class="campaign-content">
-              <h3><%= donation[:campaign] %></h3>
-              <p><strong><%= donation[:amount] %> kr</strong> - <%= donation[:date] %></p>
-              <p><%= donation[:tax_deduction] ? 'Skattefradrag: Ja' : 'Skattefradrag: Nej' %></p>
+              <p class="campaign-category"><%= campaign[:category] %></p>
+              <h3><a href="/campaigns/<%= campaign[:id] %>" class="campaign-title-link"><%= campaign[:title] %></a></h3>
+              <p><%= campaign[:description] %></p>
+              <p><strong>Mål:</strong> <%= campaign[:goal] %> kr</p>
             </div>
           </article>
         <% end %>
       <% end %>
+    </section>
+
+    <section class="detail-card">
+      <h2>Donationer</h2>
+      <p class="empty-state">Donationshistorik bliver tilfoejet i naeste version.</p>
     </section>
   </main>
 

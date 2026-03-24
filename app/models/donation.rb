@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Donation
-  # Donation model
+  # Donation model used by unit tests and amount validation logic.
   attr_accessor :id, :campaign_id, :donor_id, :amount, :anonymous, :created_at
 
   def initialize(campaign_id:, donor_id:, amount:, id: nil, anonymous: false, created_at: nil)
