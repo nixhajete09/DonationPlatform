@@ -12,4 +12,12 @@ class Donation
     @anonymous = anonymous
     @created_at = created_at
   end
+
+  def valid_amount?
+    return false if amount.nil?
+
+    amount.to_f.positive?
+  rescue StandardError
+    false
+  end
 end
