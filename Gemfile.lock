@@ -135,6 +135,7 @@ GEM
     zeitwerk (2.7.5)
 
 PLATFORMS
+  x64-mingw-ucrt
   x86_64-darwin-23
   x86_64-linux
 

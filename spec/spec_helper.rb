@@ -14,7 +14,6 @@ end
 
 RSpec.configure do |config|
   config.include AppHelper
-RSpec.configure do |config|
   config.disable_monkey_patching!
   config.expect_with :rspec do |c|
     c.syntax = :expect
