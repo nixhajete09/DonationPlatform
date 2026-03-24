@@ -51,6 +51,78 @@ helpers do
         goal: 15_000,
         deadline: Date.today + 20,
         category: 'Dyr'
+      ),
+      Campaign.new(
+        id: 4,
+        title: 'Mad til familier i krise',
+        description: 'Hjælp med madposer og hverdagsvarer til pressede familier.',
+        goal: 20_000,
+        deadline: Date.today + 25,
+        category: 'Lokalt'
+      ),
+      Campaign.new(
+        id: 5,
+        title: 'Akut hjælp til psykisk trivsel',
+        description: 'Støt gratis samtaler og rådgivning til unge i mistrivsel.',
+        goal: 18_000,
+        deadline: Date.today + 40,
+        category: 'Sundhed'
+      ),
+      Campaign.new(
+        id: 6,
+        title: 'Rent vand til landsbyer',
+        description: 'Bidrag til brønde, filtre og vandtanke i udsatte områder.',
+        goal: 30_000,
+        deadline: Date.today + 55,
+        category: 'Klima'
+      ),
+      Campaign.new(
+        id: 7,
+        title: 'Nødfond for dyrlægehjælp',
+        description: 'Hjælp skadede dyr med behandling, medicin og transport.',
+        goal: 22_000,
+        deadline: Date.today + 35,
+        category: 'Dyr'
+      ),
+      Campaign.new(
+        id: 8,
+        title: 'Skoleudstyr til børn',
+        description: 'Støt skoletasker, bøger og udstyr til børn uden ressourcer.',
+        goal: 16_000,
+        deadline: Date.today + 28,
+        category: 'Lokalt'
+      ),
+      Campaign.new(
+        id: 9,
+        title: 'Grønne byhaver',
+        description: 'Skab lokale byhaver med fællesskab, læring og biodiversitet.',
+        goal: 12_000,
+        deadline: Date.today + 50,
+        category: 'Klima'
+      ),
+      Campaign.new(
+        id: 10,
+        title: 'Hospice støttefond',
+        description: 'Giv ro og omsorg til patienter og familier i svære perioder.',
+        goal: 25_000,
+        deadline: Date.today + 32,
+        category: 'Sundhed'
+      ),
+      Campaign.new(
+        id: 11,
+        title: 'Vinterly til hjemløse',
+        description: 'Finansier varme tæpper, soveposer og varme måltider.',
+        goal: 27_000,
+        deadline: Date.today + 18,
+        category: 'Lokalt'
+      ),
+      Campaign.new(
+        id: 12,
+        title: 'Red havmiljøet nu',
+        description: 'Støt strandrensning og fjernelse af plastik i kystområder.',
+        goal: 21_000,
+        deadline: Date.today + 60,
+        category: 'Klima'
       )
     ]
   end
@@ -60,7 +132,7 @@ helpers do
 
     campaigns = DB[:campaigns]
                 .reverse_order(:created_at)
-                .limit(3)
+                .limit(24)
                 .all
                 .map do |row|
                   Campaign.new(

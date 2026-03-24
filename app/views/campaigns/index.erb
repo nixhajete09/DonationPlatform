@@ -24,6 +24,7 @@
       <p class="detail-description">Vælg en kampagne for at se flere detaljer.</p>
 
       <form action="/campaigns" method="get" class="campaign-search-form" role="search" aria-label="Søg kampagner">
+        <input type="hidden" name="category" value="<%= @selected_category %>">
         <input
           type="search"
           name="q"
@@ -33,6 +34,16 @@
         >
         <button type="submit" class="campaign-search-button">Søg</button>
       </form>
+
+      <% category_emojis = { 'Alle' => '✨', 'Klima' => '🌿', 'Dyr' => '🐾', 'Sundhed' => '❤️', 'Lokalt' => '🏘️' } %>
+      <section class="categories" aria-label="Filtrer kampagner efter kategori">
+        <% (@categories || ['Alle']).each do |category| %>
+          <% active = (@selected_category == category) %>
+          <a href="/campaigns?category=<%= category %>" class="chip<%= active ? ' chip-active' : '' %>">
+            <%= category_emojis[category] || '📌' %> <%= category %>
+          </a>
+        <% end %>
+      </section>
     </section>
 
     <section class="campaign-grid" aria-label="Kampagneliste">

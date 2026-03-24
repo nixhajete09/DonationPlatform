@@ -1,7 +1,13 @@
 # Campaigns routes
 get '/campaigns' do
   @query = params[:q].to_s.strip
+  @selected_category = params[:category].to_s.strip
+  @selected_category = 'Alle' if @selected_category.empty?
+  @categories = homepage_categories
+
   campaigns = featured_campaigns
+
+  campaigns = campaigns.select { |campaign| campaign.category == @selected_category } if @selected_category != 'Alle'
 
   unless @query.empty?
     search = @query.downcase
