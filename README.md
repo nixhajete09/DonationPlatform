@@ -84,6 +84,18 @@ Valgfrie flags:
 
 Se `documentation.md` for samlet dokumentation.
 
+## Seneste lille step (TDD light)
+
+- Tilfoejet `Donation#valid_amount?`, som kun accepterer beloeb > 0.
+- Tilfoejet isoleret test i `spec/donation_spec.rb`.
+- Auth-siden er flyttet til Sinatra view: `app/views/opret.erb` (aabnes pa `/auth` eller `/opret`).
+
+Koer kun denne test:
+
+```bash
+bundle exec rspec spec/donation_spec.rb
+```
+
 ## Azure VM (simpel projektdrift)
 
 Forudsat at Azure CLI er installeret og du er logget ind:
