@@ -3,71 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danmarks Donation - Opret Indsamling</title>
-    <link rel="stylesheet" href="/css/campaign_creation.css">
+    <title>Opret indsamling - DonationPlatform</title>
+    <link rel="stylesheet" href="/css/site.css?v=20260324-3">
 </head>
 <body>
+    <header class="site-header">
+        <nav class="nav-container" aria-label="Hovedmenu">
+            <a class="brand" href="/">Danmarks Donation</a>
+            <ul class="nav-links">
+                <li><a href="/campaigns">Kampagner</a></li>
+                <li><a href="/campaigns/new">Opret indsamling</a></li>
+                <li><a href="/auth">Log ind</a></li>
+            </ul>
+        </nav>
+    </header>
 
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo-section">
-                <span class="logo-main">Danmarks Donation</span>
-                <span class="logo-sub">Vores platform - Sorger for gennemsigtighed</span>
-            </div>
-            <div class="nav-links">
-                <a href="/campaigns">Sog</a>
-                <a href="/campaigns">Projekter</a>
-                <a href="/auth" class="login-dropdown">Log ind <small>▼</small></a>
-            </div>
-        </div>
-    </nav>
+    <main class="page-content">
+        <section class="detail-card">
+            <h1>Opret en ny indsamling</h1>
+            <p class="subtitle">Udfyld detaljerne nedenfor. Kampagner bliver gennemgaet, sa brugerne altid far en gennemsigtig platform.</p>
+        </section>
 
-    <main class="main-content">
-        <h1>Opret en ny indsamling</h1>
+        <section class="create-layout" aria-label="Opret kampagne">
+            <article class="detail-card">
+                <form action="/campaigns" method="POST" enctype="multipart/form-data" class="donation-form campaign-create-form">
+                    <label for="input-titel">Titel</label>
+                    <input type="text" name="titel" id="input-titel" placeholder="Skriv din titel her" required>
 
-        <div class="flex-container">
-            <section class="form-card">
-                <h2>Giv din kampagne en god start</h2>
-                <p class="subtitle">Udfyld nedenstaende detaljer for at oprette en ny indsamlingskampagne. Alle indsamlinger gennemgaas og godkendes af staten.</p>
+                    <label for="input-kategori">Kategori</label>
+                    <select name="kategori" id="input-kategori">
+                        <option value="">Vaelg kategori</option>
+                        <option value="klima">Klima</option>
+                        <option value="lokalt">Lokalt</option>
+                        <option value="sundhed">Sundhed</option>
+                        <option value="dyr">Dyr</option>
+                    </select>
 
-                <form action="/campaigns" method="POST" enctype="multipart/form-data">
+                    <label for="input-beloeb">Belobsmal</label>
+                    <input type="number" name="beloeb" id="input-beloeb" placeholder="kr" min="1" required>
 
-                    <div class="form-group">
-                        <label for="input-titel">Titel</label>
-                        <input type="text" name="titel" id="input-titel" placeholder="Skriv din titel her..." required>
-                    </div>
+                    <label for="input-deadline">Deadline</label>
+                    <input type="date" name="deadline" id="input-deadline">
 
-                    <div class="row">
-                        <div class="form-group">
-                            <label>Kategori</label>
-                            <select name="kategori">
-                                <option value="">Vaelg kategori</option>
-                                <option value="klima">Klima</option>
-                                <option value="lokalt">Lokalt</option>
-                                <option value="sundhed">Sundhed</option>
-                                <option value="dyr">Dyr</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-beloeb">Belobsmal</label>
-                            <input type="number" name="beloeb" id="input-beloeb" placeholder="kr" required>
-                        </div>
-                    </div>
+                    <label for="input-beskrivelse">Beskrivelse</label>
+                    <textarea name="beskrivelse" id="input-beskrivelse" rows="4" placeholder="Beskriv formalet"></textarea>
 
-                    <div class="row">
-                        <div class="form-group">
-                            <label>Deadline</label>
-                            <input type="date" name="deadline">
-                        </div>
-                        <div class="form-group"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-beskrivelse">Beskrivelse</label>
-                        <textarea name="beskrivelse" id="input-beskrivelse" rows="4" placeholder="Beskriv formalet..."></textarea>
-                    </div>
-
-                    <label>Upload billede</label>
+                    <label for="file-input">Upload billede</label>
                     <div class="upload-zone" id="drop-zone">
                         <input type="file" name="billede" id="file-input" accept="image/*" hidden>
                         <p>Traek et billede hertil eller <strong>vaelg fil</strong></p>
@@ -75,40 +56,34 @@
                     </div>
 
                     <div class="info-box">
-                        <p>Alle indsamlinger <strong>verificeres af staten</strong> for at sikre gennemsigtighed. Du vil modtage en e-mail, nar din kampagne er godkendt eller afvist.</p>
+                        <p>Alle indsamlinger verificeres for kvalitet og tydelighed, sa donorer nemt kan traeffe oplyste valg.</p>
                     </div>
 
                     <button type="submit" class="btn-primary">Send til godkendelse</button>
-                    <p class="terms">Ved indsendelse bekraefter du at overholde vores <a href="#">retningslinjer</a>.</p>
+                    <p class="terms">Ved indsendelse accepterer du platformens retningslinjer.</p>
                 </form>
-            </section>
+            </article>
 
-            <aside class="preview-section">
-                <h3>Forhandsvisning af kampagne</h3>
-                <div class="preview-card">
-                    <div class="preview-media" id="preview-media-container">
-                        <img id="preview-img" src="https://via.placeholder.com/400x250?text=Kampagne" alt="Preview">
-                    </div>
-                    <div class="card-body">
-                        <h4 id="preview-titel">Din kampagne titel</h4>
-                        <p id="preview-beskrivelse" class="preview-desc">Beskrivelse af hvad jeg samler ind til...</p>
-
-                        <div class="progress-container">
-                            <p class="progress-stats">
-                                <strong>0 kr</strong> af <span id="preview-maale">0</span> kr
-                            </p>
-                            <div class="progress-bar"><div class="fill"></div></div>
-                        </div>
-
-                        <div class="card-footer">
-                            <span>0 donationer</span>
-                            <button type="button" class="btn-doner" disabled>Doner</button>
-                        </div>
+            <aside class="campaign-card" aria-label="Forhandsvisning">
+                <div class="preview-media" id="preview-media-container">
+                    <img id="preview-img" src="https://via.placeholder.com/800x450?text=Kampagne" alt="Forhandsvisning af kampagnebillede">
+                </div>
+                <div class="card-body">
+                    <p class="campaign-category">Forhandsvisning</p>
+                    <h2 id="preview-titel">Din kampagne titel</h2>
+                    <p id="preview-beskrivelse" class="preview-desc">Beskrivelse af hvad du samler ind til.</p>
+                    <p class="detail-description"><strong>0 kr</strong> af <span id="preview-maale">0</span> kr</p>
+                    <div class="progress-bar"><div class="fill"></div></div>
+                    <div class="card-footer">
+                        <span>0 donationer</span>
+                        <button type="button" class="btn-secondary" disabled>Doner</button>
                     </div>
                 </div>
             </aside>
-        </div>
+        </section>
     </main>
+
+    <%= erb :'shared/footer', layout: false %>
 
     <script src="/js/campaign_creation.js"></script>
 </body>
