@@ -11,6 +11,7 @@ DB = Sequel.connect('sqlite://db/donation_platform.db')
 require_relative 'app/models/campaign'
 require_relative 'app/models/donation'
 require_relative 'app/models/user'
+require_relative 'app/services/thank_you_mailer'
 
 # Routes
 Dir.glob('app/routes/*.rb').each { |file| require_relative file }

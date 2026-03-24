@@ -22,6 +22,16 @@
     <section class="detail-card">
       <% if @donation_status == 'success' %>
         <p class="alert alert-success">Tak for din donation pa <%= @donation_amount %> kr.</p>
+        <% if @donation_tier %>
+          <p class="alert alert-info">Takkeniveau: <strong><%= @donation_tier %></strong></p>
+        <% end %>
+        <% if @donation_email_status == 'smtp' %>
+          <p class="alert alert-success">Kvittering og takkemail er sendt til din email.</p>
+        <% elsif @donation_email_status == 'simulated' %>
+          <p class="alert alert-info">Email er simuleret lokalt (se tmp/sent_emails.log).</p>
+        <% elsif @donation_email_status == 'failed' %>
+          <p class="alert alert-error">Email kunne ikke sendes. Donation er stadig registreret.</p>
+        <% end %>
       <% elsif @donation_status == 'error' %>
         <p class="alert alert-error"><%= @donation_error || 'Noget gik galt. Proev igen.' %></p>
       <% end %>
@@ -47,8 +57,9 @@
           <label for="donor_name">Navn</label>
           <input id="donor_name" name="donor_name" type="text" placeholder="Dit navn">
 
-          <label for="donor_email">Email</label>
+          <label for="donor_email">Email (valgfri)</label>
           <input id="donor_email" name="donor_email" type="email" placeholder="dig@email.dk">
+          <p class="form-help">Skriv email hvis du vil modtage kvittering og takkemail uden konto.</p>
 
           <label class="checkbox-row" for="anonymous">
             <input id="anonymous" name="anonymous" type="checkbox" value="1">

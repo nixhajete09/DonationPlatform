@@ -314,6 +314,12 @@ body {
   color: #7f1d1d;
 }
 
+.alert-info {
+  background-color: #e8f0ff;
+  border: 1px solid #c7d8ff;
+  color: #1e3a8a;
+}
+
 .donation-form {
   display: grid;
   gap: 0.45rem;
@@ -324,6 +330,13 @@ body {
   font-size: 0.86rem;
   font-weight: 600;
   color: #334155;
+}
+
+.form-help {
+  margin-top: -0.2rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.82rem;
+  color: #64748b;
 }
 
 .donation-form input[type='text'],
