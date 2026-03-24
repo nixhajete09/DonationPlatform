@@ -59,7 +59,11 @@ end
 
 #opret/login page 
 get '/auth' do
-  erb :auth
+  erb :opret
+end
+
+get '/opret' do
+  erb :opret
 end
 
 post '/login' do
