@@ -41,7 +41,7 @@ get '/campaigns/:id' do
   @campaign = find_campaign_by_id(params[:id])
   halt 404, 'Kampagne ikke fundet' unless @campaign
 
-  @collected = example_collected_amount(@campaign.goal)
+  @collected = collected_amount_for_campaign(@campaign)
   @progress = progress_percentage(@collected, @campaign.goal)
   @donation_status = params[:status]
   @donation_amount = params[:amount]
@@ -71,6 +71,19 @@ post '/campaigns/:id/donations' do
     redirect "/campaigns/#{campaign.id}?status=error&error=CPR+skal+v%C3%A6re+10+cifre+for+skattefradrag&tax=1"
   end
 
+  current_collected = collected_amount_for_campaign(campaign)
+
+  DB[:donations].insert(
+    campaign_id: campaign.id,
+    donor_name: donor_name.empty? ? nil : donor_name,
+    donor_email: donor_email.empty? ? nil : donor_email,
+    amount: amount_value.to_i,
+    anonymous: params[:anonymous] == '1',
+    tax_deduction: wants_tax_deduction,
+    cpr: wants_tax_deduction ? cpr_digits : nil,
+    created_at: Time.now
+  )
+
   email_status = 'none'
   tier = ThankYouMailer.new.tier_for(amount_value).to_s
 
@@ -79,7 +92,7 @@ post '/campaigns/:id/donations' do
       redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+en+gyldig+email+eller+lad+feltet+v%C3%A6re+tomt"
     end
 
-    collected_after = example_collected_amount(campaign.goal) + amount_value
+    collected_after = current_collected + amount_value
     email_result = ThankYouMailer.new.send_tiered_thank_you(
       recipient_email: donor_email,
       donor_name: donor_name,

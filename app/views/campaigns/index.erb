@@ -52,7 +52,7 @@
       <% else %>
         <% @campaigns.each_with_index do |campaign, index| %>
           <% campaign_id = campaign.id || (index + 1) %>
-          <% collected = example_collected_amount(campaign.goal) %>
+          <% collected = collected_amount_for_campaign(campaign) %>
           <% progress = progress_percentage(collected, campaign.goal) %>
           <article class="campaign-card">
             <div

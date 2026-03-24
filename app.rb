@@ -20,6 +20,20 @@ unless DB.table_exists?(:campaigns)
   end
 end
 
+unless DB.table_exists?(:donations)
+  DB.create_table :donations do
+    primary_key :id
+    foreign_key :campaign_id, :campaigns, null: false, on_delete: :cascade
+    String :donor_name
+    String :donor_email
+    Integer :amount, null: false
+    TrueClass :anonymous, default: false
+    TrueClass :tax_deduction, default: false
+    String :cpr
+    DateTime :created_at, default: Sequel::CURRENT_TIMESTAMP
+  end
+end
+
 # Models directory
 require_relative 'app/models/campaign'
 require_relative 'app/models/donation'
@@ -215,6 +229,16 @@ helpers do
     return 0 if goal.to_i <= 0
 
     (goal.to_i * 0.55).to_i
+  end
+
+  def collected_amount_for_campaign(campaign)
+    base = example_collected_amount(campaign.goal)
+    return base unless DB.table_exists?(:donations)
+
+    donated = DB[:donations].where(campaign_id: campaign.id.to_i).sum(:amount).to_i
+    base + donated
+  rescue Sequel::Error
+    base
   end
 
   def progress_percentage(collected, goal)
