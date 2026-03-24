@@ -311,6 +311,9 @@ helpers do
   rescue Sequel::Error
     featured_campaigns.find { |campaign| campaign.id.to_i == id }
   end
+
+end
+
 get '/ui' do
   default_ui_file = Dir.glob(File.join('.', 'ui', '*.html')).sort.first
   halt 404, 'Ingen HTML-fil fundet i ui-mappen' unless default_ui_file
