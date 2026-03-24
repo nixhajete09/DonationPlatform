@@ -26,7 +26,7 @@
     <main class="page-content">
         <section class="detail-card">
             <h1>Opret en ny indsamling</h1>
-            <p class="subtitle">Udfyld detaljerne nedenfor. Kampagner bliver gennemgaet, sa brugerne altid far en gennemsigtig platform.</p>
+            <p class="subtitle">Udfyld detaljerne nedenfor. Kampagner bliver gennemgået, så brugerne altid får en gennemsigtig platform.</p>
         </section>
 
         <section class="create-layout" aria-label="Opret kampagne">
@@ -37,31 +37,31 @@
 
                     <label for="input-kategori">Kategori</label>
                     <select name="kategori" id="input-kategori">
-                        <option value="">Vaelg kategori</option>
+                        <option value="">Vælg kategori</option>
                         <option value="klima">Klima</option>
                         <option value="lokalt">Lokalt</option>
                         <option value="sundhed">Sundhed</option>
                         <option value="dyr">Dyr</option>
                     </select>
 
-                    <label for="input-beloeb">Belobsmal</label>
+                    <label for="input-beloeb">Beløbsmål</label>
                     <input type="number" name="beloeb" id="input-beloeb" placeholder="kr" min="1" required>
 
                     <label for="input-deadline">Deadline</label>
                     <input type="date" name="deadline" id="input-deadline">
 
                     <label for="input-beskrivelse">Beskrivelse</label>
-                    <textarea name="beskrivelse" id="input-beskrivelse" rows="4" placeholder="Beskriv formalet"></textarea>
+                    <textarea name="beskrivelse" id="input-beskrivelse" rows="4" placeholder="Beskriv formålet"></textarea>
 
                     <label for="file-input">Upload billede</label>
                     <div class="upload-zone" id="drop-zone">
                         <input type="file" name="billede" id="file-input" accept="image/*" hidden>
-                        <p>Traek et billede hertil eller <strong>vaelg fil</strong></p>
+                        <p>Træk et billede hertil eller <strong>vælg fil</strong></p>
                         <span>JPEG eller PNG, maks 5 MB</span>
                     </div>
 
                     <div class="info-box">
-                        <p>Alle indsamlinger verificeres for kvalitet og tydelighed, sa donorer nemt kan traeffe oplyste valg.</p>
+                        <p>Alle indsamlinger verificeres for kvalitet og tydelighed, så donorer nemt kan træffe oplyste valg.</p>
                     </div>
 
                     <button type="submit" class="btn-primary">Send til godkendelse</button>
@@ -69,19 +69,19 @@
                 </form>
             </article>
 
-            <aside class="campaign-card" aria-label="Forhandsvisning">
+            <aside class="campaign-card" aria-label="Forhåndsvisning">
                 <div class="preview-media" id="preview-media-container">
-                    <img id="preview-img" src="https://via.placeholder.com/800x450?text=Kampagne" alt="Forhandsvisning af kampagnebillede">
+                    <img id="preview-img" src="https://via.placeholder.com/800x450?text=Kampagne" alt="Forhåndsvisning af kampagnebillede">
                 </div>
                 <div class="card-body">
-                    <p class="campaign-category">Forhandsvisning</p>
+                    <p class="campaign-category">Forhåndsvisning</p>
                     <h2 id="preview-titel">Din kampagne titel</h2>
                     <p id="preview-beskrivelse" class="preview-desc">Beskrivelse af hvad du samler ind til.</p>
                     <p class="detail-description"><strong>0 kr</strong> af <span id="preview-maale">0</span> kr</p>
                     <div class="progress-bar"><div class="fill"></div></div>
                     <div class="card-footer">
                         <span>0 donationer</span>
-                        <button type="button" class="btn-secondary" disabled>Doner</button>
+                        <button type="button" class="btn-secondary" disabled>Donér</button>
                     </div>
                 </div>
             </aside>

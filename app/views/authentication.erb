@@ -26,7 +26,7 @@
     <main class="page-content">
         <section class="detail-card">
             <h1>Opret konto eller log ind</h1>
-            <p class="detail-description">Alt samlet pa en enkel side, sa du hurtigt kan komme i gang med at donere eller oprette din egen indsamling.</p>
+            <p class="detail-description">Alt samlet på en enkel side, så du hurtigt kan komme i gang med at donere eller oprette din egen indsamling.</p>
         </section>
 
         <% if @signup_error %>
@@ -39,12 +39,12 @@
         <section class="auth-layout" aria-label="Autentificering">
             <article class="detail-card">
                 <h2>Opret konto</h2>
-                <p class="detail-description">Ny bruger? Opret en konto pa fa sekunder.</p>
+                <p class="detail-description">Ny bruger? Opret en konto på få sekunder.</p>
                 <form action="/signup" method="POST" class="donation-form campaign-create-form">
-                    <label for="signup-brugernavn">Vaelg brugernavn</label>
+                    <label for="signup-brugernavn">Vælg brugernavn</label>
                     <input id="signup-brugernavn" type="text" name="brugernavn" placeholder="Navn eller mailadresse" required>
 
-                    <label for="signup-kode">Vaelg adgangskode</label>
+                    <label for="signup-kode">Vælg adgangskode</label>
                     <input id="signup-kode" type="password" name="kode" placeholder="Mindst 6 tegn" required>
 
                     <button type="submit" class="btn-secondary">Opret bruger</button>
