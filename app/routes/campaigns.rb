@@ -1,28 +1,16 @@
 # frozen_string_literal: true
 
-require 'uri'
-
 # Campaigns routes
 get '/campaigns' do
   @query = params[:q].to_s.strip
-  @selected_category = params[:category].to_s.strip
-  @selected_category = 'Alle' if @selected_category.empty?
+  @selected_category = normalized_selected_category(params[:category])
   @categories = homepage_categories
 
-  campaigns = featured_campaigns
-
-  campaigns = campaigns.select { |campaign| campaign.category == @selected_category } if @selected_category != 'Alle'
-
-  unless @query.empty?
-    search = @query.downcase
-    campaigns = campaigns.select do |campaign|
-      [campaign.title, campaign.description, campaign.category].any? do |value|
-        value.to_s.downcase.include?(search)
-      end
-    end
-  end
-
-  @campaigns = campaigns
+  @campaigns = filter_campaigns(
+    featured_campaigns,
+    selected_category: @selected_category,
+    query: @query
+  )
   erb :'campaigns/index'
 end
 
@@ -65,13 +53,9 @@ post '/campaigns/:id/donations' do
   wants_tax_deduction = params[:tax_deduction] == '1'
   cpr_digits = params[:cpr].to_s.gsub(/\D/, '')
 
-  if amount.empty? || amount_value <= 0
-    redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+et+gyldigt+bel%C3%B8b"
-  end
+  redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+et+gyldigt+bel%C3%B8b" if amount.empty? || amount_value <= 0
 
-  if wants_tax_deduction && cpr_digits.length != 10
-    redirect "/campaigns/#{campaign.id}?status=error&error=CPR+skal+v%C3%A6re+10+cifre+for+skattefradrag&tax=1"
-  end
+  redirect "/campaigns/#{campaign.id}?status=error&error=CPR+skal+v%C3%A6re+10+cifre+for+skattefradrag&tax=1" if wants_tax_deduction && cpr_digits.length != 10
 
   current_collected = collected_amount_for_campaign(campaign)
 
@@ -90,9 +74,7 @@ post '/campaigns/:id/donations' do
   tier = ThankYouMailer.new.tier_for(amount_value).to_s
 
   unless donor_email.empty?
-    unless donor_email.match?(/\A[^\s@]+@[^\s@]+\.[^\s@]+\z/)
-      redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+en+gyldig+email+eller+lad+feltet+v%C3%A6re+tomt"
-    end
+    redirect "/campaigns/#{campaign.id}?status=error&error=Indtast+en+gyldig+email+eller+lad+feltet+v%C3%A6re+tomt" unless donor_email.match?(/\A[^\s@]+@[^\s@]+\.[^\s@]+\z/)
 
     collected_after = current_collected + amount_value
     email_result = ThankYouMailer.new.send_tiered_thank_you(
@@ -120,11 +102,25 @@ post '/campaigns' do
   image_url = params[:image_url].to_s.strip
 
   if title.empty? || description.empty? || goal <= 0 || category.empty?
-    redirect "/campaigns/new?error=Udfyld+alle+p%C3%A5kr%C3%A6vede+felter&title=#{URI.encode_www_form_component(title)}&description=#{URI.encode_www_form_component(description)}&goal=#{goal}&category=#{URI.encode_www_form_component(category)}&image_url=#{URI.encode_www_form_component(image_url)}"
+    redirect campaign_form_redirect_url(
+      error: 'Udfyld alle påkrævede felter',
+      title: title,
+      description: description,
+      goal: goal,
+      category: category,
+      image_url: image_url
+    )
   end
 
   if !image_url.empty? && image_url !~ %r{\Ahttps?://}i
-    redirect "/campaigns/new?error=Inds%C3%A6t+et+gyldigt+billedlink+der+starter+med+http+eller+https&title=#{URI.encode_www_form_component(title)}&description=#{URI.encode_www_form_component(description)}&goal=#{goal}&category=#{URI.encode_www_form_component(category)}&image_url=#{URI.encode_www_form_component(image_url)}"
+    redirect campaign_form_redirect_url(
+      error: 'Indsæt et gyldigt billedlink der starter med http eller https',
+      title: title,
+      description: description,
+      goal: goal,
+      category: category,
+      image_url: image_url
+    )
   end
 
   DB[:campaigns].insert(

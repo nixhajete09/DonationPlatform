@@ -5,6 +5,7 @@ require 'sinatra/contrib'
 require 'sequel'
 require 'dotenv/load'
 require 'date'
+require 'uri'
 
 # Database setup
 DB = Sequel.connect('sqlite://db/donation_platform.db')
@@ -53,6 +54,39 @@ end
 helpers do
   def homepage_categories
     %w[Alle Klima Dyr Sundhed Lokalt]
+  end
+
+  def normalized_selected_category(raw_category)
+    category = raw_category.to_s.strip
+    category.empty? ? 'Alle' : category
+  end
+
+  def filter_campaigns(campaigns, selected_category:, query:)
+    filtered_campaigns = campaigns
+
+    filtered_campaigns = filtered_campaigns.select { |campaign| campaign.category == selected_category } if selected_category != 'Alle'
+
+    search_query = query.to_s.strip.downcase
+    return filtered_campaigns if search_query.empty?
+
+    filtered_campaigns.select do |campaign|
+      [campaign.title, campaign.description, campaign.category].any? do |value|
+        value.to_s.downcase.include?(search_query)
+      end
+    end
+  end
+
+  def campaign_form_redirect_url(error:, title:, description:, goal:, category:, image_url:)
+    query = URI.encode_www_form(
+      error: error,
+      title: title,
+      description: description,
+      goal: goal,
+      category: category,
+      image_url: image_url
+    )
+
+    "/campaigns/new?#{query}"
   end
 
   def default_featured_campaigns
@@ -180,9 +214,7 @@ helpers do
       existing = existing_by_title[campaign.title]
 
       if existing
-        if existing[:image_url].to_s.strip.empty? && !campaign.image_url.to_s.strip.empty?
-          DB[:campaigns].where(id: existing[:id]).update(image_url: campaign.image_url)
-        end
+        DB[:campaigns].where(id: existing[:id]).update(image_url: campaign.image_url) if existing[:image_url].to_s.strip.empty? && !campaign.image_url.to_s.strip.empty?
         next
       end
 
@@ -278,23 +310,14 @@ end
 
 # Home page
 get '/' do
-  @selected_category = params[:category].to_s.strip
-  @selected_category = 'Alle' if @selected_category.empty?
+  @selected_category = normalized_selected_category(params[:category])
   @query = params[:q].to_s.strip
 
-  campaigns = featured_campaigns
-  campaigns = campaigns.select { |campaign| campaign.category == @selected_category } if @selected_category != 'Alle'
-
-  unless @query.empty?
-    search = @query.downcase
-    campaigns = campaigns.select do |campaign|
-      [campaign.title, campaign.description, campaign.category].any? do |value|
-        value.to_s.downcase.include?(search)
-      end
-    end
-  end
-
   @categories = homepage_categories
-  @featured_campaigns = campaigns
+  @featured_campaigns = filter_campaigns(
+    featured_campaigns,
+    selected_category: @selected_category,
+    query: @query
+  )
   erb :index
 end

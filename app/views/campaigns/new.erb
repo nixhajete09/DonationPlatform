@@ -62,43 +62,6 @@
     </section>
   </main>
 
-  <footer class="site-footer" aria-label="Bundinformation">
-    <div class="footer-container">
-      <div class="footer-grid">
-        <section class="footer-column" aria-labelledby="footer-contact">
-          <h2 id="footer-contact">Kontakt</h2>
-          <p>Email: <a href="mailto:kontakt@danmarksdonation.dk">kontakt@danmarksdonation.dk</a></p>
-          <p>Telefon: <a href="tel:+4533000000">+45 33 00 00 00</a></p>
-          <p>Mandag-fredag kl. 09:00-16:00</p>
-        </section>
-
-        <section class="footer-column" aria-labelledby="footer-help">
-          <h2 id="footer-help">Hjælp</h2>
-          <p><a href="#">Ofte stillede spørgsmål</a></p>
-          <p><a href="#">Sådan fungerer donationer</a></p>
-          <p><a href="#">Support</a></p>
-        </section>
-
-        <section class="footer-column" aria-labelledby="footer-about">
-          <h2 id="footer-about">Om Danmarks Donation</h2>
-          <p><a href="#">Om os</a></p>
-          <p><a href="#">Transparens og rapporter</a></p>
-          <p><a href="#">Samarbejdspartnere</a></p>
-        </section>
-
-        <section class="footer-column" aria-labelledby="footer-legal">
-          <h2 id="footer-legal">Juridisk</h2>
-          <p><a href="#">Privatlivspolitik</a></p>
-          <p><a href="#">Cookiepolitik</a></p>
-          <p><a href="#">Vilkår</a></p>
-        </section>
-      </div>
-
-      <div class="footer-bottom">
-        <p>CVR: 12345678</p>
-        <p>© 2026 Danmarks Donation. Alle rettigheder forbeholdes.</p>
-      </div>
-    </div>
-  </footer>
+  <%= erb :'shared/footer', layout: false %>
 </body>
 </html>
