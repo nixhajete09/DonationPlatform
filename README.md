@@ -160,3 +160,13 @@ Noedvendige GitHub Secrets:
 - `AZURE_VM_SSH_KEY` (privat SSH noegle)
 - `GHCR_USERNAME` (GitHub brugernavn)
 - `GHCR_PAT` (PAT med mindst `read:packages`)
+
+Noedvendige runtime-secrets til app/mails pa VM:
+- `SESSION_SECRET` (stark random streng)
+- `SMTP_ADDRESS` (fx `smtp-relay.brevo.com`)
+- `SMTP_PORT` (typisk `587`)
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+- `MAIL_FROM` (verificeret afsenderadresse hos din SMTP-provider)
+
+Deploy-workflowet skriver disse secrets til `/opt/donationplatform/.env.production` pa VM og starter containeren med `--env-file`.

@@ -112,3 +112,16 @@ The checks are:
 - Pull requests get fast feedback before merge.
 - Contributors must fix lint and test failures before merge.
 - Existing style debt does not block new pull requests immediately.
+
+## Deploy pa Azure VM (runtime env)
+
+Deploy-workflowet skriver en runtime env-fil pa VM: `/opt/donationplatform/.env.production`.
+Containeren startes derefter med `--env-file`, sa appen far de samme noedvendige variabler som lokalt.
+
+Noedvendige GitHub Secrets til runtime:
+- `SESSION_SECRET`
+- `SMTP_ADDRESS`
+- `SMTP_PORT`
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+- `MAIL_FROM`
