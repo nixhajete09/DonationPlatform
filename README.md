@@ -45,6 +45,28 @@ ruby app.rb
 
 Besøg: `http://localhost:4567`
 
+## Docker (samme setup på tværs af maskiner)
+
+Start hele stacken (web + lokal mailserver):
+
+```bash
+docker compose up --build
+```
+
+Efter start:
+- Web: `http://localhost:4567`
+- Mail UI (Mailpit): `http://localhost:8025`
+
+Mail virker i Docker på to måder:
+- Uden SMTP credentials: app sender til lokal Mailpit (god til demo/test)
+- Med SMTP credentials i `.env`: app sender via din eksterne SMTP (fx Brevo)
+
+Stop stacken:
+
+```bash
+docker compose down
+```
+
 ## Pre-commit Code Review
 
 Aktiver pre-commit hook lokalt (kør én gang):
