@@ -13,4 +13,7 @@ COPY . .
 
 EXPOSE 4567
 
-CMD ["bundle", "exec", "ruby", "app.rb", "-o", "0.0.0.0", "-p", "4567"]
+ENV PORT=4567
+ENV RACK_ENV=development
+
+CMD ["sh", "-c", "bundle exec ruby app.rb -o 0.0.0.0 -p ${PORT}"]

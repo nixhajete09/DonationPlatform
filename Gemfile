@@ -10,7 +10,7 @@ gem 'puma', '~> 6.0'
 gem 'sequel', '~> 5.0'
 gem 'sinatra', '~> 3.0'
 gem 'sinatra-contrib', '~> 3.0'
-gem 'sqlite3', '~> 1.6'
+gem 'sqlite3', '~> 2.0'
 
 group :development, :test do
   gem 'rack-test', '~> 2.0'

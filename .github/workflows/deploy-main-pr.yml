@@ -66,6 +66,11 @@ jobs:
             IMAGE_REF="${{ needs.build_and_push.outputs.image_ref }}"
             GHCR_USERNAME="${{ secrets.GHCR_USERNAME }}"
             GHCR_PAT="${{ secrets.GHCR_PAT }}"
+            SMTP_ADDRESS="${{ secrets.SMTP_ADDRESS }}"
+            SMTP_PORT="${{ secrets.SMTP_PORT }}"
+            SMTP_USERNAME="${{ secrets.SMTP_USERNAME }}"
+            SMTP_PASSWORD="${{ secrets.SMTP_PASSWORD }}"
+            MAIL_FROM="${{ secrets.MAIL_FROM }}"
 
             if ! command -v docker >/dev/null 2>&1; then
               echo "Docker er ikke installeret pa VM."
@@ -73,6 +78,18 @@ jobs:
             fi
 
             sudo mkdir -p /opt/donationplatform/db
+
+            # Build runtime env file on the VM from GitHub Secrets.
+            sudo tee /opt/donationplatform/.env.production > /dev/null <<EOF
+            RACK_ENV=production
+            PORT=4567
+            DATABASE_URL=sqlite://db/donation_platform.db
+            SMTP_ADDRESS=${SMTP_ADDRESS}
+            SMTP_PORT=${SMTP_PORT}
+            SMTP_USERNAME=${SMTP_USERNAME}
+            SMTP_PASSWORD=${SMTP_PASSWORD}
+            MAIL_FROM=${MAIL_FROM}
+            EOF
 
             echo "$GHCR_PAT" | sudo docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
             sudo docker pull "$IMAGE_REF"
@@ -86,6 +103,7 @@ jobs:
               --name donationplatform \
               --restart unless-stopped \
               -p 4567:4567 \
+              --env-file /opt/donationplatform/.env.production \
               -v /opt/donationplatform/db:/app/db \
               "$IMAGE_REF"
 
