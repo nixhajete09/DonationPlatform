@@ -29,8 +29,6 @@
         <p class="alert alert-success">Tak for din donation på <%= @donation_amount %> kr.</p>
         <% if @donation_email_status == 'smtp' %>
           <p class="alert alert-success">Kvittering er sendt til din email.</p>
-        <% elsif @donation_email_status == 'simulated' %>
-          <p class="alert alert-info">Email er simuleret lokalt (se tmp/sent_emails.log).</p>
         <% elsif @donation_email_status == 'failed' %>
           <p class="alert alert-error">Email kunne ikke sendes. Donation er stadig registreret.</p>
         <% end %>

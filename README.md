@@ -45,6 +45,28 @@ ruby app.rb
 
 Besøg: `http://localhost:4567`
 
+## Docker (samme setup på tværs af maskiner)
+
+Start hele stacken (web + lokal mailserver):
+
+```bash
+docker compose up --build
+```
+
+Efter start:
+- Web: `http://localhost:4567`
+- Mail UI (Mailpit): `http://localhost:8025`
+
+Mail virker i Docker på to måder:
+- Uden SMTP credentials: app sender til lokal Mailpit (god til demo/test)
+- Med SMTP credentials i `.env`: app sender via din eksterne SMTP (fx Brevo)
+
+Stop stacken:
+
+```bash
+docker compose down
+```
+
 ## Pre-commit Code Review
 
 Aktiver pre-commit hook lokalt (kør én gang):
@@ -138,3 +160,12 @@ Noedvendige GitHub Secrets:
 - `AZURE_VM_SSH_KEY` (privat SSH noegle)
 - `GHCR_USERNAME` (GitHub brugernavn)
 - `GHCR_PAT` (PAT med mindst `read:packages`)
+
+Noedvendige runtime-secrets til app/mails pa VM:
+- `SMTP_ADDRESS` (fx `smtp-relay.brevo.com`)
+- `SMTP_PORT` (typisk `587`)
+- `SMTP_USERNAME`
+- `SMTP_PASSWORD`
+- `MAIL_FROM` (verificeret afsenderadresse hos din SMTP-provider)
+
+Deploy-workflowet skriver disse secrets til `/opt/donationplatform/.env.production` pa VM og starter containeren med `--env-file`.
