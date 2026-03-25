@@ -3,7 +3,7 @@ FROM ruby:3.2-slim
 WORKDIR /app
 
 RUN apt-get update -qq && \
-    apt-get install -y --no-install-recommends build-essential libsqlite3-dev && \
+    apt-get install -y --no-install-recommends build-essential libsqlite3-dev pkg-config && \
     rm -rf /var/lib/apt/lists/*
 
 COPY Gemfile Gemfile.lock ./
