@@ -119,7 +119,6 @@ Deploy-workflowet skriver en runtime env-fil pa VM: `/opt/donationplatform/.env.
 Containeren startes derefter med `--env-file`, sa appen far de samme noedvendige variabler som lokalt.
 
 Noedvendige GitHub Secrets til runtime:
-- `SESSION_SECRET`
 - `SMTP_ADDRESS`
 - `SMTP_PORT`
 - `SMTP_USERNAME`

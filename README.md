@@ -162,7 +162,6 @@ Noedvendige GitHub Secrets:
 - `GHCR_PAT` (PAT med mindst `read:packages`)
 
 Noedvendige runtime-secrets til app/mails pa VM:
-- `SESSION_SECRET` (stark random streng)
 - `SMTP_ADDRESS` (fx `smtp-relay.brevo.com`)
 - `SMTP_PORT` (typisk `587`)
 - `SMTP_USERNAME`
