@@ -44,7 +44,35 @@ class ThankYouMailer
   private
 
   def smtp_configured?
-    ENV['SMTP_ADDRESS'] && ENV['MAIL_FROM']
+    !smtp_address.empty? && !mail_from.empty?
+  end
+
+  def smtp_address
+    ENV['SMTP_ADDRESS'].to_s.strip.empty? ? ENV['BREVO_SMTP_ADDRESS'].to_s.strip : ENV['SMTP_ADDRESS'].to_s.strip
+  end
+
+  def smtp_port
+    value = ENV['SMTP_PORT'].to_s.strip
+    value = ENV['BREVO_SMTP_PORT'].to_s.strip if value.empty?
+    value.empty? ? 587 : value.to_i
+  end
+
+  def smtp_username
+    value = ENV['SMTP_USERNAME'].to_s.strip
+    value = ENV['BREVO_SMTP_USERNAME'].to_s.strip if value.empty?
+    value
+  end
+
+  def smtp_password
+    value = ENV['SMTP_PASSWORD'].to_s.strip
+    value = ENV['BREVO_SMTP_PASSWORD'].to_s.strip if value.empty?
+    value
+  end
+
+  def mail_from
+    value = ENV['MAIL_FROM'].to_s.strip
+    value = ENV['BREVO_MAIL_FROM'].to_s.strip if value.empty?
+    value
   end
 
   def build_body(tier:, donor_name:, amount:, campaign_title:, collected:, goal:)
@@ -74,11 +102,11 @@ class ThankYouMailer
   end
 
   def send_via_smtp(to:, subject:, body:)
-    from = ENV.fetch('MAIL_FROM')
-    address = ENV.fetch('SMTP_ADDRESS')
-    port = ENV.fetch('SMTP_PORT', '587').to_i
-    username = ENV['SMTP_USERNAME']
-    password = ENV['SMTP_PASSWORD']
+    from = mail_from
+    address = smtp_address
+    port = smtp_port
+    username = smtp_username
+    password = smtp_password
 
     message = <<~MAIL
       From: Danmarks Donation <#{from}>
@@ -90,7 +118,7 @@ class ThankYouMailer
       #{body}
     MAIL
 
-    if username.to_s.empty?
+    if username.empty?
       Net::SMTP.start(address, port) { |smtp| smtp.send_message(message, from, to) }
     else
       Net::SMTP.start(address, port, 'localhost', username, password, :plain) do |smtp|
